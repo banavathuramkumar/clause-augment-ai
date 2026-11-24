@@ -1,0 +1,201 @@
+clause_id,clause_text,clause_type
+CLS-0001,The Receiving Party shall maintain in strict confidence and shall not disclose to any third party any Confidential Information of the Disclosing Party without prior written consent.,Confidentiality
+CLS-0002,"Confidential Information shall include all technical, financial, commercial, or other proprietary data disclosed either orally or in writing.",Confidentiality
+CLS-0003,The obligations of confidentiality shall survive the termination or expiration of this Agreement for a period of five (5) years.,Confidentiality
+CLS-0004,"The Receiving Party agrees to restrict access to Confidential Information solely to its employees, advisors, and contractors who have a need to know.",Confidentiality
+CLS-0005,Confidential Information does not include information that is or becomes publicly known through no breach of this Agreement by the Receiving Party.,Confidentiality
+CLS-0006,"Upon written request of the Disclosing Party, the Receiving Party shall promptly return or certify destruction of all copies of Confidential Information.",Confidentiality
+CLS-0007,Neither party shall disclose the existence or terms of this Agreement without the prior written approval of the other party.,Confidentiality
+CLS-0008,Each party agrees to use the same degree of care to protect the other party's Confidential Information as it uses to protect its own confidential materials of like nature.,Confidentiality
+CLS-0009,"If the Receiving Party is legally compelled by court order to disclose any Confidential Information, it shall provide prompt written notice to the Disclosing Party.",Confidentiality
+CLS-0010,Proprietary materials exchanged under this Agreement shall remain the exclusive property of the disclosing entity.,Confidentiality
+CLS-0011,"The recipient shall not reverse engineer, decompile, or disassemble any trade secret or software provided hereunder.",Confidentiality
+CLS-0012,"All notes, analyses, and summaries prepared by the recipient incorporating Confidential Information shall remain subject to the terms of this Agreement.",Confidentiality
+CLS-0013,Nothing herein shall obligate either party to disclose any particular item of confidential or proprietary information.,Confidentiality
+CLS-0014,The confidentiality restrictions herein shall not apply to information independently developed by the Receiving Party without reference to Confidential Information.,Confidentiality
+CLS-0015,Both parties acknowledge that unauthorized disclosure of trade secrets may cause irreparable harm for which monetary damages alone would be inadequate.,Confidentiality
+CLS-0016,The Receiving Party shall immediately notify the Disclosing Party upon discovery of any loss or unauthorized disclosure of Confidential Information.,Confidentiality
+CLS-0017,The recipient shall mark all physical and digital copies of confidential files with appropriate protective legends.,Confidentiality
+CLS-0018,"No license under any patent, copyright, or trademark is granted or implied by the disclosure of Confidential Information.",Confidentiality
+CLS-0019,Trade secrets shall remain subject to confidentiality obligations indefinitely or for as long as they qualify as trade secrets under applicable law.,Confidentiality
+CLS-0020,Any disclosure of Confidential Information to an permitted contractor shall require a written non-disclosure agreement with terms at least as restrictive as this Section.,Confidentiality
+CLS-0021,"The Vendor agrees to indemnify, defend, and hold harmless the Customer and its officers, directors, and employees from and against any third-party claims arising out of negligence.",Indemnification
+CLS-0022,"Each party shall defend and indemnify the other party against all losses, damages, liabilities, and expenses arising from any material breach of this Agreement.",Indemnification
+CLS-0023,"The Contractor shall indemnify the Client against any claims alleging that the Deliverables infringe or misappropriate any patent, copyright, or trade secret of a third party.",Indemnification
+CLS-0024,Indemnification obligations under this Section are conditioned upon the indemnified party giving prompt written notice of any covered claim.,Indemnification
+CLS-0025,"The indemnifying party shall have sole control over the defense and settlement of any indemnifiable claim, provided that settlement does not admit liability.",Indemnification
+CLS-0026,"The Service Provider will indemnify the Customer against all fines, penalties, and direct losses resulting from the Service Provider's violation of applicable privacy laws.",Indemnification
+CLS-0027,The indemnified party shall have the right to participate in the defense of any claim at its own expense with counsel of its choosing.,Indemnification
+CLS-0028,Customer shall indemnify and hold harmless Licensor from any third-party claims arising from Customer's unauthorized modification of the Licensed Software.,Indemnification
+CLS-0029,The obligations under this Article shall apply regardless of whether the claim or liability is caused in part by an indemnified party.,Indemnification
+CLS-0030,In no event shall the indemnifying party settle any claim requiring an admission of guilt or financial contribution without the indemnified party's consent.,Indemnification
+CLS-0031,The Supplier shall indemnify the Buyer against all product liability claims arising from design defects or manufacturing deficiencies in the supplied goods.,Indemnification
+CLS-0032,The Tenant shall indemnify and hold harmless the Landlord against all claims for personal injury or property damage occurring on the leased premises.,Indemnification
+CLS-0033,Each party's indemnification liabilities shall be reduced proportionately to the extent that the other party contributed to the loss.,Indemnification
+CLS-0034,The Consultant shall indemnify and hold the Company harmless against any tax assessment or withholding liability arising from contractor classification.,Indemnification
+CLS-0035,The indemnifying party shall promptly reimburse the indemnified party for all reasonable legal fees and costs incurred in enforcing this indemnification right.,Indemnification
+CLS-0036,Licensor agrees to defend Licensee against any allegation that the Cloud Service infringes an existing United States patent.,Indemnification
+CLS-0037,"If an infringement claim occurs, the indemnifying party may procure for the indemnified party the right to continue using the affected service.",Indemnification
+CLS-0038,"This indemnification provision shall survive any expiration, cancellation, or termination of this Agreement.",Indemnification
+CLS-0039,The obligations of defense and indemnification set forth herein are subject to the indemnified party providing reasonable cooperation and documentation.,Indemnification
+CLS-0040,The Distributor shall defend and indemnify Manufacturer against all claims resulting from false advertising or misrepresentations made by Distributor.,Indemnification
+CLS-0041,Either party may terminate this Agreement without cause upon giving sixty (60) days prior written notice to the other party.,Termination
+CLS-0042,Either party may terminate this Agreement immediately upon written notice if the other party commits a material breach that remains uncured for thirty (30) days.,Termination
+CLS-0043,"This Agreement shall automatically terminate upon the bankruptcy, insolvency, or appointment of a receiver for either party.",Termination
+CLS-0044,"Upon termination of this Agreement, all licenses granted hereunder shall immediately cease and determine.",Termination
+CLS-0045,Termination of this Agreement shall not relieve either party from liability for obligations or payments accrued prior to the effective date of termination.,Termination
+CLS-0046,"The Company may terminate this Agreement immediately if the Contractor engages in gross negligence, fraud, or willful misconduct.",Termination
+CLS-0047,Customer may terminate any Statement of Work for convenience upon thirty (30) days advance written notice to Service Provider.,Termination
+CLS-0048,"Upon expiration or termination, each party shall promptly return or destroy all property and Confidential Information belonging to the other party.",Termination
+CLS-0049,"Sections concerning Confidentiality, Indemnification, Limitation of Liability, and Governing Law shall survive any termination of this Agreement.",Termination
+CLS-0050,"In the event of termination by Customer for cause, Service Provider shall refund any prepaid and unused fees on a pro-rata basis.",Termination
+CLS-0051,Failure by either party to enforce any right upon breach shall not waive the right to terminate for subsequent breaches.,Termination
+CLS-0052,"If a Force Majeure event continues for more than ninety (90) consecutive days, either party may terminate this Agreement upon written notice.",Termination
+CLS-0053,The Licensor may suspend or terminate access to the Platform immediately upon notice if Licensee fails to pay past-due invoices within ten (10) days.,Termination
+CLS-0054,"Upon termination, Customer shall pay Service Provider for all authorized services performed and reimbursable expenses incurred up to the termination date.",Termination
+CLS-0055,This Agreement will expire at the end of the Initial Term unless renewed in writing by mutual consent of both parties.,Termination
+CLS-0056,Either party may terminate this Agreement if the other party undergoes a change of control involving a direct competitor.,Termination
+CLS-0057,Termination notices must be sent via certified mail or tracked courier to the designated representatives listed in Section 14.,Termination
+CLS-0058,The expiration or termination of this Agreement shall be without prejudice to any other remedies available at law or in equity.,Termination
+CLS-0059,Service Provider may terminate services if continuing performance would violate applicable statutory regulations or export control rules.,Termination
+CLS-0060,"Upon notice of termination, Contractor shall immediately stop work unless directed otherwise in writing by the Client.",Termination
+CLS-0061,"In no event shall either party be liable to the other for any indirect, incidental, consequential, special, or punitive damages.",Liability
+CLS-0062,"Except for gross negligence or willful misconduct, each party's total aggregate liability under this Agreement shall not exceed the fees paid in the preceding twelve (12) months.",Liability
+CLS-0063,"The limitations of liability set forth in this Section shall apply regardless of whether an action is brought in contract, tort, or warranty.",Liability
+CLS-0064,"Neither party shall be liable for lost profits, loss of data, loss of business reputation, or cost of substitute procurement.",Liability
+CLS-0065,The maximum cumulative liability of Licensor for all claims arising out of this Agreement shall be strictly capped at the amount paid by Licensee.,Liability
+CLS-0066,The exclusions of liability in this Section shall not apply to breaches of confidentiality obligations or indemnification duties.,Liability
+CLS-0067,Customer agrees that Service Provider shall have no liability for outages or service degradations caused by third-party telecommunication carriers.,Liability
+CLS-0068,"To the maximum extent permitted by applicable law, all warranties not expressly set forth herein are disclaimed.",Liability
+CLS-0069,No action or claim arising out of this Agreement may be brought by either party more than one (1) year after the cause of action accrued.,Liability
+CLS-0070,Each party acknowledges that the fees charged reflect the allocation of risk and agreed liability caps between the parties.,Liability
+CLS-0071,Neither party's liability for death or personal injury resulting from its own negligence shall be limited or excluded.,Liability
+CLS-0072,In no event shall the Company be liable for any punitive or exemplary damages arising out of performance or non-performance.,Liability
+CLS-0073,The liability caps herein shall apply in the aggregate to all claims and shall not be cumulative across multiple incidents.,Liability
+CLS-0074,Licensor shall not be responsible for any damages resulting from unauthorized access or modification to Customer data by third parties.,Liability
+CLS-0075,Under no circumstances shall the Consultant's aggregate liability exceed the total compensation actually received under the relevant Statement of Work.,Liability
+CLS-0076,The parties agree that the economic terms of this contract depend upon the enforceability of these risk limitation provisions.,Liability
+CLS-0077,"Neither party excludes liability for fraud, fraudulent misrepresentation, or any liability that cannot be excluded under applicable law.",Liability
+CLS-0078,Any statutory rights that cannot be waived by private contract shall remain unaffected by the limitations set forth in this Article.,Liability
+CLS-0079,The aggregate liability cap shall increase to two times the annual contract value solely in the event of an adjudicated data breach.,Liability
+CLS-0080,Service Provider disclaims any express or implied guarantee that the system will be entirely error-free or uninterrupted.,Liability
+CLS-0081,"This Agreement shall be governed by, and construed in accordance with, the laws of the State of Delaware, without giving effect to conflicts of law principles.",Governing Law
+CLS-0082,"The parties hereby submit to the exclusive jurisdiction and venue of the federal and state courts located in New York County, New York.",Governing Law
+CLS-0083,This contract and all claims arising out of or related to it shall be governed by the laws of England and Wales.,Governing Law
+CLS-0084,"Any dispute arising from this contract shall be adjudicated exclusively in the competent courts of San Francisco, California.",Governing Law
+CLS-0085,The United Nations Convention on Contracts for the International Sale of Goods shall not apply to this Agreement.,Governing Law
+CLS-0086,This Agreement shall be interpreted and enforced under the laws of the Commonwealth of Massachusetts.,Governing Law
+CLS-0087,The parties irrevocably waive any objection to the venue of any action brought in the specified forum based on inconvenient forum.,Governing Law
+CLS-0088,Each party hereby irrevocably waives any right to a trial by jury in any litigation arising out of this Agreement.,Governing Law
+CLS-0089,"This contract shall be construed under the laws of the State of Texas, without regard to its choice of law provisions.",Governing Law
+CLS-0090,All legal proceedings arising out of this Agreement shall be instituted in the District Court for the Northern District of Illinois.,Governing Law
+CLS-0091,"The validity, construction, and performance of this Agreement shall be governed by the laws of the State of Washington.",Governing Law
+CLS-0092,The parties agree that service of process in any legal action may be delivered by registered mail to their principal office address.,Governing Law
+CLS-0093,This Agreement is made under and shall be governed in all respects by the laws of the Federal Republic of Germany.,Governing Law
+CLS-0094,"The governing law of this Agreement shall be the laws of the State of New York, excluding its conflict of laws rules.",Governing Law
+CLS-0095,"Both parties consent to personal jurisdiction in the state courts situated in Travis County, Texas.",Governing Law
+CLS-0096,Nothing in this Agreement shall prevent either party from seeking preliminary injunctive relief in any court of competent jurisdiction.,Governing Law
+CLS-0097,This Agreement shall be governed by the substantive laws of the Province of Ontario and the federal laws of Canada applicable therein.,Governing Law
+CLS-0098,The choice of governing law shall remain effective regardless of the location where services are rendered or received.,Governing Law
+CLS-0099,The parties agree that this contract shall be deemed executed and performable in the State of Georgia.,Governing Law
+CLS-0100,"Any legal action brought by Customer against Service Provider must be commenced in the courts of Wilmington, Delaware.",Governing Law
+CLS-0101,Customer shall pay all undisputed invoices within thirty (30) days from the date of invoice receipt.,Payment
+CLS-0102,Late payments shall accrue interest at the rate of one and a half percent (1.5%) per month or the maximum rate permitted by law.,Payment
+CLS-0103,"All fees specified in this Agreement are exclusive of applicable federal, state, local, or value-added taxes.",Payment
+CLS-0104,"In the event of a disputed charge, Customer shall notify Service Provider in writing within fifteen (15) days of the invoice date.",Payment
+CLS-0105,"Customer shall be responsible for all sales, use, excise, and withholding taxes associated with purchases under this Agreement.",Payment
+CLS-0106,Payment shall be made by electronic funds transfer or Automated Clearing House (ACH) to the bank account specified by Vendor.,Payment
+CLS-0107,"If any undisputed invoice remains unpaid for more than forty-five (45) days, Vendor reserves the right to suspend performance.",Payment
+CLS-0108,All payments under this Agreement shall be made in United States Dollars ($ USD) unless agreed otherwise in writing.,Payment
+CLS-0109,Service Provider may increase recurring subscription fees upon renewal by providing at least sixty (60) days advance notice.,Payment
+CLS-0110,Customer shall reimburse Service Provider for all pre-approved out-of-pocket travel and lodging expenses incurred in performing services.,Payment
+CLS-0111,Failure to dispute an invoice within thirty (30) days of issuance shall constitute acceptance of the invoiced amount.,Payment
+CLS-0112,All fees paid under this Agreement are non-refundable except as expressly provided in the Termination for Cause section.,Payment
+CLS-0113,The Client shall pay a non-refundable deposit of twenty-five percent (25%) upon execution of this contract.,Payment
+CLS-0114,Invoices shall be generated on a monthly billing cycle and transmitted electronically to the designated billing contact.,Payment
+CLS-0115,Customer agrees to pay all reasonable collection agency fees and attorney fees incurred in collecting delinquent accounts.,Payment
+CLS-0116,"No deduction, setoff, or withholding of payments shall be made by Customer on account of any alleged counterclaim.",Payment
+CLS-0117,Contractor shall submit detailed timesheets and expense receipts supporting all time-and-materials payment requests.,Payment
+CLS-0118,Any credit balance granted to Customer must be utilized within twelve (12) months or it shall expire without cash value.,Payment
+CLS-0119,Milestone payments shall be disbursed within fourteen (14) days following written acceptance of each agreed milestone deliverable.,Payment
+CLS-0120,Taxes withheld by Customer pursuant to foreign statutory mandates shall be accompanied by official tax receipts.,Payment
+CLS-0121,"Neither party shall be liable for failure or delay in performance caused by circumstances beyond its reasonable control, including acts of God, war, and epidemics.",Force Majeure
+CLS-0122,"If a Force Majeure event prevents performance for more than thirty (30) days, the non-affected party may terminate this Agreement.",Force Majeure
+CLS-0123,"Events of Force Majeure include strikes, lockouts, supply shortages, civil unrest, natural disasters, power failures, and government directives.",Force Majeure
+CLS-0124,The party experiencing a Force Majeure event shall promptly notify the other party in writing stating the nature and expected duration.,Force Majeure
+CLS-0125,The affected party shall use all reasonable efforts to mitigate the effects of the Force Majeure event and resume performance quickly.,Force Majeure
+CLS-0126,Payment obligations for services rendered prior to the Force Majeure event shall not be excused or delayed by this provision.,Force Majeure
+CLS-0127,A Force Majeure event shall automatically extend the performance deadline for a period equal to the duration of the disruption.,Force Majeure
+CLS-0128,"Neither party shall be in default if non-performance is caused by severe acts of nature such as floods, earthquakes, or hurricanes.",Force Majeure
+CLS-0129,Failure of subcontractors or software providers shall not constitute Force Majeure unless caused by an independent event beyond their control.,Force Majeure
+CLS-0130,"If governmental sanctions or trade embargoes prevent product delivery, the affected party's obligations shall be temporarily suspended.",Force Majeure
+CLS-0131,"War, hostilities, invasion, terrorist acts, or widespread cyberattacks against national infrastructure shall constitute Force Majeure events.",Force Majeure
+CLS-0132,"Upon cessation of the Force Majeure condition, the affected party shall give immediate notice and resume full contractual performance.",Force Majeure
+CLS-0133,The doctrine of impossibility or frustration of purpose shall be interpreted consistent with the express allocations of this Article.,Force Majeure
+CLS-0134,Both parties agree to establish disaster recovery protocols to minimize potential disruptions caused by Force Majeure incidents.,Force Majeure
+CLS-0135,The right to invoke Force Majeure shall not apply to conditions resulting from a party's financial insolvency or inability to pay.,Force Majeure
+CLS-0136,"In the event of an epidemic or public health lockdown, both parties shall negotiate in good faith to adapt delivery schedules.",Force Majeure
+CLS-0137,Strikes or industrial disputes restricted solely to the workforce of the affected party shall not be considered Force Majeure.,Force Majeure
+CLS-0138,Notice of Force Majeure must be delivered within five (5) business days of the occurrence of the disruptive event.,Force Majeure
+CLS-0139,Either party may procure temporary substitute services from third parties during an ongoing Force Majeure suspension.,Force Majeure
+CLS-0140,The obligations of confidentiality shall remain in full force and effect during any period of Force Majeure.,Force Majeure
+CLS-0141,"Any dispute, controversy, or claim arising out of this Agreement shall be settled by binding arbitration in accordance with AAA rules.",Dispute Resolution
+CLS-0142,"Prior to initiating litigation or arbitration, senior executives of both parties shall meet in good faith to resolve the dispute amicably.",Dispute Resolution
+CLS-0143,"Arbitration proceedings shall be conducted by a single neutral arbitrator in New York City, and the proceedings shall be held in English.",Dispute Resolution
+CLS-0144,"The decision and award of the arbitrator shall be final, non-appealable, and enforceable in any court of competent jurisdiction.",Dispute Resolution
+CLS-0145,The prevailing party in any dispute resolution proceeding shall be entitled to recover reasonable attorney fees and associated legal costs.,Dispute Resolution
+CLS-0146,"All claims must be brought in the parties' individual capacity, and neither party may act as a plaintiff or class member in any class proceeding.",Dispute Resolution
+CLS-0147,The parties agree that informal mediation administered by JAMS shall be a mandatory prerequisite to filing any formal legal claim.,Dispute Resolution
+CLS-0148,Each party consents that arbitration discoveries shall be strictly limited to essential document exchanges to reduce litigation expenses.,Dispute Resolution
+CLS-0149,Nothing herein shall prevent either party from seeking emergency injunctive relief from a court of equity to prevent irreparable harm.,Dispute Resolution
+CLS-0150,The arbitrator shall have no authority to award punitive damages or damages in excess of the contractual limitations of liability.,Dispute Resolution
+CLS-0151,Any mediation or arbitration proceedings shall remain strictly confidential between the parties and their legal representatives.,Dispute Resolution
+CLS-0152,"If the parties cannot agree upon a single arbitrator within thirty (30) days, each party shall appoint one arbitrator and the two shall select a third.",Dispute Resolution
+CLS-0153,The statutes of limitations applicable to any claim shall be tolled during the pendency of formal mediation proceedings.,Dispute Resolution
+CLS-0154,The costs and administrative fees of the arbitration tribunal shall initially be shared equally by both parties pending the final award.,Dispute Resolution
+CLS-0155,Disputes regarding intellectual property infringement or breach of non-disclosure terms are exempt from mandatory arbitration.,Dispute Resolution
+CLS-0156,The arbitration hearing shall conclude within sixty (60) days of arbitrator appointment unless extended for good cause shown.,Dispute Resolution
+CLS-0157,Each party agrees that any award rendered by the arbitral panel may be entered for judgment in any court having subject jurisdiction.,Dispute Resolution
+CLS-0158,The governing law specified in Section 12 shall govern the interpretation and validity of this arbitration agreement.,Dispute Resolution
+CLS-0159,Notice of dispute must set forth the factual basis of the claim and the specific contractual remedies demanded.,Dispute Resolution
+CLS-0160,Informal executive negotiations must continue for at least twenty (20) business days before either party may commence mediation.,Dispute Resolution
+CLS-0161,"All intellectual property rights in the software, documentation, and underlying technology remain the exclusive property of Licensor.",Intellectual Property
+CLS-0162,"Customer is granted a non-exclusive, non-transferable, revocable license to access and use the Platform during the Subscription Term.",Intellectual Property
+CLS-0163,"All inventions, work product, and deliverables created by Contractor under this Agreement shall constitute 'works made for hire'.",Intellectual Property
+CLS-0164,"Client retains all right, title, and interest in and to Customer Data and Customer's pre-existing intellectual property.",Intellectual Property
+CLS-0165,"Licensee shall not modify, copy, distribute, sublicense, or create derivative works based upon the proprietary software.",Intellectual Property
+CLS-0166,"Any feedback, suggestions, or enhancements submitted by Customer may be used by Service Provider without restriction or royalty obligations.",Intellectual Property
+CLS-0167,"Contractor hereby assigns to Company all right, title, and ownership in all patents, copyrights, and trade secrets developed hereunder.",Intellectual Property
+CLS-0168,"Service Provider retains all rights in general knowledge, skills, ideas, concepts, and reusable code developed during the engagement.",Intellectual Property
+CLS-0169,No title or ownership of any proprietary software or patent is transferred to Customer under this Agreement.,Intellectual Property
+CLS-0170,"Licensee shall not remove, alter, or obscure any copyright notices, trademark notices, or proprietary legends affixed to the materials.",Intellectual Property
+CLS-0171,"Customer grants Vendor a limited license to host, process, and transmit Customer Data solely to perform the services.",Intellectual Property
+CLS-0172,"The documentation, user manuals, and training assets supplied by Licensor are protected by international copyright conventions.",Intellectual Property
+CLS-0173,"If work product does not legally qualify as a work made for hire, Contractor irrevocably assigns all rights therein to Client.",Intellectual Property
+CLS-0174,Each party shall retain sole ownership of all pre-existing intellectual property developed prior to the effective date of this Agreement.,Intellectual Property
+CLS-0175,Vendor warrants that it possesses all necessary intellectual property licenses and permissions required to perform the services.,Intellectual Property
+CLS-0176,"Customer shall not facilitate any third party to scrape, harvest, or extract algorithmic models or databases from the Service.",Intellectual Property
+CLS-0177,"All registered trademarks, service marks, and logos remain the exclusive property of their respective trademark registrants.",Intellectual Property
+CLS-0178,Contractor agrees to execute all assignment documentation and patent declarations necessary to perfect Company's intellectual property rights.,Intellectual Property
+CLS-0179,Any open-source software embedded in the solution is licensed strictly pursuant to its governing open-source license agreement.,Intellectual Property
+CLS-0180,Unauthorized reproduction or decompilation of Licensor's proprietary software shall constitute copyright infringement and breach of contract.,Intellectual Property
+CLS-0181,"Each party shall comply with all applicable data privacy laws, including the General Data Protection Regulation (GDPR) and CCPA.",Data Protection
+CLS-0182,Service Provider shall implement appropriate technical and organizational measures to safeguard personal data against unauthorized access.,Data Protection
+CLS-0183,Service Provider shall notify Customer in writing within forty-eight (48) hours of becoming aware of any confirmed personal data breach.,Data Protection
+CLS-0184,Customer represents that it has obtained all necessary consents and authorizations required to transfer personal data to Service Provider.,Data Protection
+CLS-0185,Service Provider shall process personal data solely on documented instructions from Customer and for the purposes specified herein.,Data Protection
+CLS-0186,"Upon termination of the services, Service Provider shall delete or return all personal data in its custody unless retention is required by law.",Data Protection
+CLS-0187,Service Provider shall not transfer personal data across international borders without implementing approved standard contractual clauses.,Data Protection
+CLS-0188,Customer retains the right to conduct annual security audits of Service Provider's data handling practices upon reasonable notice.,Data Protection
+CLS-0189,Service Provider shall ensure that personnel authorized to process personal data have committed themselves to confidentiality.,Data Protection
+CLS-0190,"Service Provider shall assist Customer in responding to data subject requests to exercise rights of access, rectification, or erasure.",Data Protection
+CLS-0191,Sub-processors may only be engaged with prior written authorization of Customer and under equivalent data protection terms.,Data Protection
+CLS-0192,Personal data shall be encrypted both in transit using TLS 1.3 and at rest using industry-standard AES-256 encryption.,Data Protection
+CLS-0193,Each party shall maintain comprehensive records of data processing activities as mandated by statutory compliance guidelines.,Data Protection
+CLS-0194,Service Provider shall cooperate with supervisory authorities and provide access to its data security documentation upon request.,Data Protection
+CLS-0195,Customer shall not transmit special category sensitive data unless explicitly agreed in a separate Data Processing Addendum.,Data Protection
+CLS-0196,Service Provider shall carry out periodic vulnerability scans and independent penetration testing on all data processing infrastructure.,Data Protection
+CLS-0197,"In the event of a security incident, Service Provider shall take immediate remediation steps to contain and mitigate the vulnerability.",Data Protection
+CLS-0198,The parties agree that the Data Processing Addendum (DPA) attached hereto as Exhibit B is hereby incorporated into this Agreement.,Data Protection
+CLS-0199,Service Provider shall maintain documented incident response plans and test them at least once every twelve (12) months.,Data Protection
+CLS-0200,Personal data shall be retained only for as long as necessary to fulfill the operational purposes set forth in this contract.,Data Protection
