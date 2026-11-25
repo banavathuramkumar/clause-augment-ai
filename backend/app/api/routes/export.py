@@ -14,7 +14,7 @@ router = APIRouter(prefix="/export", tags=["export"])
 @router.get("/dataset/{dataset_id}")
 def export_dataset(
     dataset_id: int,
-    format: str = Query("csv", regex="^(csv|json|jsonl)$"),
+    format: str = Query("csv", pattern="^(csv|json|jsonl)$"),
     include_augmented: bool = True,
     only_valid: bool = True,
     db: Session = Depends(get_db)

@@ -30,7 +30,7 @@ def get_validation_rules():
 @router.get("/dataset/{dataset_id}")
 def get_dataset_validation_records(
     dataset_id: int,
-    status: str = Query("all", regex="^(all|passed|failed)$"),
+    status: str = Query("all", pattern="^(all|passed|failed)$"),
     limit: int = 50,
     db: Session = Depends(get_db)
 ):
