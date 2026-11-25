@@ -1,6 +1,6 @@
 import random
 from typing import List
-from app.algorithms.base import BaseAugmenter
+from backend.app.algorithms.base import BaseAugmenter
 
 SAFE_LEGAL_MODIFIERS = [
     "promptly", "duly", "mutually", "specifically", "formally",

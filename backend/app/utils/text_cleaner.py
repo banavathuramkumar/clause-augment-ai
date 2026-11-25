@@ -4,7 +4,7 @@ from typing import List, Tuple
 from nltk.tokenize import word_tokenize, sent_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
-from app.config import LEGAL_KEYWORDS, LEGAL_MODAL_VERBS, LEGAL_NEGATIONS
+from backend.app.config import LEGAL_KEYWORDS, LEGAL_MODAL_VERBS, LEGAL_NEGATIONS
 
 # Initialize standard NLTK components
 try:

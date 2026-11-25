@@ -1,65 +1,78 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
+import json
+from typing import List
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import Dict, Any, List
-import pandas as pd
+from backend.app.core.database import get_db
+from backend.app.core.models import AugmentedClause, ValidationResult
+from backend.app.core.schemas import ValidationRunRequest, ValidationItemResult
+from backend.app.services.validation_service import validation_engine
 
-from app.core.database import get_db
-from app.core.models import AugmentedRecord, Dataset
-from app.services.validation_service import ValidationService
+router = APIRouter(prefix="/validation", tags=["Validation"])
 
-router = APIRouter(prefix="/validation", tags=["validation"])
-val_service = ValidationService()
+@router.post("/run", response_model=List[ValidationItemResult])
+def run_validation(request: ValidationRunRequest, db: Session = Depends(get_db)):
+    augmented_clauses = db.query(AugmentedClause).filter(
+        AugmentedClause.dataset_id == request.dataset_id
+    ).all()
 
-@router.get("/rules")
-def get_validation_rules():
-    return {
-        "text_rules": [
-            {"rule": "Cosine Similarity Threshold", "description": "Ensures augmented text semantic cosine similarity falls between [0.60, 0.98]."},
-            {"rule": "Negation Consistency", "description": "Detects inversion of negation polarity ('not', 'never', 'no')."},
-            {"rule": "Modal Obligation Check", "description": "Flags disappearance of imperative obligation modals ('shall', 'must', 'required')."},
-            {"rule": "Numerical Entity Retention", "description": "Preserves critical metrics, quantities, currency values and dates."},
-            {"rule": "Length Drift Boundary", "description": "Enforces output length within +/- 40% of original token count."}
-        ],
-        "tabular_rules": [
-            {"rule": "Dynamic Physical Bounds", "description": "Enforces numerical values within 15% tolerance of observed distribution span."},
-            {"rule": "Categorical Domain Validity", "description": "Rejects synthetic rows with unobserved or illegal category tokens."},
-            {"rule": "Data Type Consistency", "description": "Guarantees integer/float preservation and null constraint adherence."}
-        ]
-    }
+    if not augmented_clauses:
+        raise HTTPException(status_code=404, detail="No augmented clauses found for this dataset.")
 
-@router.get("/dataset/{dataset_id}")
-def get_dataset_validation_records(
-    dataset_id: int,
-    status: str = Query("all", pattern="^(all|passed|failed)$"),
-    limit: int = 50,
-    db: Session = Depends(get_db)
-):
-    query = db.query(AugmentedRecord).filter(AugmentedRecord.dataset_id == dataset_id)
-    if status == "passed":
-        query = query.filter(AugmentedRecord.is_valid == True)
-    elif status == "failed":
-        query = query.filter(AugmentedRecord.is_valid == False)
+    results = []
+    for aug in augmented_clauses:
+        val_res = validation_engine.validate(
+            orig_text=aug.original_text,
+            aug_text=aug.augmented_text,
+            threshold=request.similarity_threshold,
+            enforce_negations=request.enforce_negations,
+            enforce_modals=request.enforce_modal_verbs,
+            enforce_keywords=request.enforce_keywords,
+            enforce_numbers=request.enforce_numbers_dates
+        )
 
-    records = query.order_by(AugmentedRecord.id.desc()).limit(limit).all()
+        aug.similarity_score = val_res["similarity_score"]
+        aug.status = val_res["status"]
+        aug.validation_reason = val_res["reason"]
 
-    total_valid = db.query(AugmentedRecord).filter(AugmentedRecord.dataset_id == dataset_id, AugmentedRecord.is_valid == True).count()
-    total_invalid = db.query(AugmentedRecord).filter(AugmentedRecord.dataset_id == dataset_id, AugmentedRecord.is_valid == False).count()
+        val_rec = db.query(ValidationResult).filter(
+            ValidationResult.augmented_clause_id == aug.id
+        ).first()
 
-    return {
-        "total_generated": total_valid + total_invalid,
-        "valid_count": total_valid,
-        "invalid_count": total_invalid,
-        "pass_rate": round(total_valid / (total_valid + total_invalid), 4) if (total_valid + total_invalid) > 0 else 1.0,
-        "records": [
-            {
-                "id": r.id,
-                "algorithm": r.algorithm,
-                "original_row": r.original_row_json,
-                "augmented_row": r.augmented_row_json,
-                "is_valid": r.is_valid,
-                "validation_score": r.validation_score,
-                "rejection_reason": r.rejection_reason
-            }
-            for r in records
-        ]
-    }
+        if not val_rec:
+            val_rec = ValidationResult(
+                augmented_clause_id=aug.id,
+                similarity_score=val_res["similarity_score"],
+                legal_keywords_preserved=val_res["legal_keywords_preserved"],
+                negation_preserved=val_res["negation_preserved"],
+                modal_verbs_preserved=val_res["modal_verbs_preserved"],
+                numbers_dates_preserved=val_res["numbers_dates_preserved"],
+                status=val_res["status"],
+                flag_reasons=json.dumps(val_res["flag_reasons"])
+            )
+            db.add(val_rec)
+        else:
+            val_rec.similarity_score = val_res["similarity_score"]
+            val_rec.legal_keywords_preserved = val_res["legal_keywords_preserved"]
+            val_rec.negation_preserved = val_res["negation_preserved"]
+            val_rec.modal_verbs_preserved = val_res["modal_verbs_preserved"]
+            val_rec.numbers_dates_preserved = val_res["numbers_dates_preserved"]
+            val_rec.status = val_res["status"]
+            val_rec.flag_reasons = json.dumps(val_res["flag_reasons"])
+
+        results.append(ValidationItemResult(
+            id=val_rec.id or aug.id,
+            augmented_clause_id=aug.id,
+            original_text=aug.original_text,
+            augmented_text=aug.augmented_text,
+            technique=aug.technique,
+            similarity_score=val_res["similarity_score"],
+            legal_keywords_preserved=val_res["legal_keywords_preserved"],
+            negation_preserved=val_res["negation_preserved"],
+            modal_verbs_preserved=val_res["modal_verbs_preserved"],
+            numbers_dates_preserved=val_res["numbers_dates_preserved"],
+            status=val_res["status"],
+            flag_reasons=val_res["flag_reasons"]
+        ))
+
+    db.commit()
+    return results

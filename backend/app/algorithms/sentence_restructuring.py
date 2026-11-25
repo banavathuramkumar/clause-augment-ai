@@ -1,7 +1,7 @@
 import random
 import re
 from typing import List
-from app.algorithms.base import BaseAugmenter
+from backend.app.algorithms.base import BaseAugmenter
 
 class SentenceRestructuringAugmenter(BaseAugmenter):
     def __init__(self):

@@ -6,10 +6,10 @@ from typing import Dict, Any, List
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, f1_score
 from sqlalchemy.orm import Session
-from app.core.models import TrainingExperiment, Clause
-from app.core.schemas import RobustnessResult, RobustnessRunRequest
-from app.config import TRAINED_MODELS_DIR
-from app.utils.logger import logger
+from backend.app.core.models import TrainingExperiment, Clause
+from backend.app.core.schemas import RobustnessResult, RobustnessRunRequest
+from backend.app.config import TRAINED_MODELS_DIR
+from backend.app.utils.logger import logger
 
 class RobustnessEvaluationService:
     @staticmethod

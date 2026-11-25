@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.core.database import get_db
-from app.core.schemas import ExperimentResponse
-from app.services.training_service import training_service
+from backend.app.core.database import get_db
+from backend.app.core.schemas import ExperimentResponse
+from backend.app.services.training_service import training_service
 
 router = APIRouter(prefix="/evaluation", tags=["Evaluation"])
 

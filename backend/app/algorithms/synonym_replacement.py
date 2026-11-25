@@ -3,7 +3,7 @@ import re
 from typing import List
 from nltk.corpus import wordnet
 from nltk.tokenize import word_tokenize
-from app.algorithms.base import BaseAugmenter
+from backend.app.algorithms.base import BaseAugmenter
 
 class SynonymReplacementAugmenter(BaseAugmenter):
     def __init__(self):

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from app.core.schemas import PreprocessingRequest, PreprocessingResponse
-from app.services.preprocessing_service import PreprocessingService
+from backend.app.core.schemas import PreprocessingRequest, PreprocessingResponse
+from backend.app.services.preprocessing_service import PreprocessingService
 
 router = APIRouter(prefix="/preprocessing", tags=["Preprocessing"])
 

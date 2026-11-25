@@ -1,78 +1,122 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+import io
+import csv
+import json
+from typing import List, Optional
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, Query
 from sqlalchemy.orm import Session
-from typing import List, Dict, Any, Optional
-import os
-import shutil
-import pandas as pd
+from backend.app.core.database import get_db
+from backend.app.core.models import Dataset, Clause
+from backend.app.core.schemas import DatasetResponse, ClauseResponse, DatasetStats, DatasetExpansionSummary
+from backend.app.services.dataset_service import dataset_service
 
-from app.core.database import get_db
-from app.core.models import Dataset, DatasetRecord
-from app.core.schemas import DatasetResponse, DatasetStats, ColumnConfigUpdate
-from app.services.dataset_service import DatasetService
-
-router = APIRouter(prefix="/datasets", tags=["datasets"])
-service = DatasetService()
+router = APIRouter(prefix="/datasets", tags=["Datasets"])
 
 @router.get("", response_model=List[DatasetResponse])
 def get_datasets(db: Session = Depends(get_db)):
-    return service.list_datasets(db)
+    datasets = db.query(Dataset).order_by(Dataset.created_at.desc()).all()
+    # If empty, automatically load built-in sample
+    if not datasets:
+        sample = dataset_service.load_built_in_sample(db)
+        datasets = [sample]
 
-@router.get("/{dataset_id}", response_model=DatasetResponse)
-def get_dataset(dataset_id: int, db: Session = Depends(get_db)):
-    ds = service.get_dataset(db, dataset_id)
-    if not ds:
-        raise HTTPException(status_code=404, detail="Dataset not found")
-    return ds
-
-@router.get("/{dataset_id}/preview")
-def get_preview(dataset_id: int, limit: int = 15, db: Session = Depends(get_db)):
-    preview = service.get_dataset_preview(db, dataset_id, limit=limit)
-    if not preview:
-        raise HTTPException(status_code=404, detail="Dataset not found")
-    return preview
-
-@router.get("/{dataset_id}/stats", response_model=DatasetStats)
-def get_stats(dataset_id: int, db: Session = Depends(get_db)):
-    stats = service.get_dataset_stats(db, dataset_id)
-    if not stats:
-        raise HTTPException(status_code=404, detail="Dataset not found")
-    return stats
+    results = []
+    for d in datasets:
+        clauses = db.query(Clause).filter(Clause.dataset_id == d.id).all()
+        stats = dataset_service.get_stats(clauses)
+        results.append(DatasetResponse(
+            id=d.id,
+            name=d.name,
+            description=d.description,
+            filename=d.filename,
+            total_clauses=d.total_clauses,
+            num_categories=d.num_categories,
+            created_at=d.created_at,
+            stats=stats
+        ))
+    return results
 
 @router.post("/upload", response_model=DatasetResponse)
 async def upload_dataset(
+    name: str = Form(...),
+    description: Optional[str] = Form(None),
     file: UploadFile = File(...),
-    name: Optional[str] = None,
-    modality: Optional[str] = None,
-    task_type: Optional[str] = None,
     db: Session = Depends(get_db)
 ):
-    upload_dir = "backend/datasets/uploads"
-    os.makedirs(upload_dir, exist_ok=True)
-    file_path = os.path.join(upload_dir, file.filename)
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    contents = await file.read()
+    filename = file.filename or "uploaded_dataset"
+    records = []
 
-    dataset_name = name or file.filename.rsplit(".", 1)[0]
-    return service.load_dataset_file(
-        db=db,
-        file_path=file_path,
-        name=dataset_name,
-        modality=modality,
-        task_type=task_type
+    try:
+        if filename.endswith(".csv"):
+            text = contents.decode("utf-8")
+            reader = csv.DictReader(io.StringIO(text))
+            for row in reader:
+                records.append(row)
+        elif filename.endswith(".json"):
+            records = json.loads(contents.decode("utf-8"))
+            if isinstance(records, dict) and "clauses" in records:
+                records = records["clauses"]
+        else:
+            raise HTTPException(status_code=400, detail="Only CSV and JSON dataset formats are supported.")
+
+        dataset = dataset_service.create_dataset_from_records(
+            db=db,
+            name=name,
+            records=records,
+            description=description,
+            filename=filename
+        )
+        clauses = db.query(Clause).filter(Clause.dataset_id == dataset.id).all()
+        stats = dataset_service.get_stats(clauses)
+
+        return DatasetResponse(
+            id=dataset.id,
+            name=dataset.name,
+            description=dataset.description,
+            filename=dataset.filename,
+            total_clauses=dataset.total_clauses,
+            num_categories=dataset.num_categories,
+            created_at=dataset.created_at,
+            stats=stats
+        )
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to process dataset: {str(e)}")
+
+@router.get("/{dataset_id}", response_model=DatasetResponse)
+def get_dataset(dataset_id: str, db: Session = Depends(get_db)):
+    dataset = db.query(Dataset).filter(Dataset.id == dataset_id).first()
+    if not dataset:
+        raise HTTPException(status_code=404, detail="Dataset not found")
+    clauses = db.query(Clause).filter(Clause.dataset_id == dataset.id).all()
+    stats = dataset_service.get_stats(clauses)
+    return DatasetResponse(
+        id=dataset.id,
+        name=dataset.name,
+        description=dataset.description,
+        filename=dataset.filename,
+        total_clauses=dataset.total_clauses,
+        num_categories=dataset.num_categories,
+        created_at=dataset.created_at,
+        stats=stats
     )
 
-@router.post("/{dataset_id}/config", response_model=DatasetResponse)
-def update_column_config(
-    dataset_id: int,
-    config: ColumnConfigUpdate,
+@router.get("/{dataset_id}/clauses", response_model=List[ClauseResponse])
+def get_clauses(
+    dataset_id: str,
+    category: Optional[str] = None,
+    limit: int = Query(default=100, le=500),
+    offset: int = 0,
     db: Session = Depends(get_db)
 ):
-    ds = service.update_column_config(db, dataset_id, config)
-    if not ds:
-        raise HTTPException(status_code=404, detail="Dataset not found")
-    return ds
+    q = db.query(Clause).filter(Clause.dataset_id == dataset_id)
+    if category:
+        q = q.filter(Clause.clause_type == category)
+    clauses = q.offset(offset).limit(limit).all()
+    return clauses
 
-@router.post("/seed-benchmarks")
-def seed_benchmarks(db: Session = Depends(get_db)):
-    loaded = service.seed_default_benchmarks(db)
-    return {"status": "success", "seeded_datasets": len(loaded)}
+@router.get("/{dataset_id}/expansion", response_model=DatasetExpansionSummary)
+def get_expansion(dataset_id: str, db: Session = Depends(get_db)):
+    try:
+        return dataset_service.get_expansion_summary(db, dataset_id)
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))

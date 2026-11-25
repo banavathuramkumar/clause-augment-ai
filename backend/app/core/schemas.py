@@ -1,91 +1,172 @@
-"""
-Pydantic schemas supporting universal datasets (text, tabular, mixed).
-"""
-from pydantic import BaseModel, Field, ConfigDict
-from typing import Optional, List, Dict, Any, Union
+from typing import List, Optional, Dict, Any
 from datetime import datetime
+from pydantic import BaseModel, Field, ConfigDict
 
-class ColumnMeta(BaseModel):
-    name: str
-    dtype: str
-    role: str
-    missing_count: int
-    missing_ratio: float
-    unique_count: int
-    sample_values: List[Any]
-    is_target_candidate: bool = False
-    is_input_candidate: bool = False
-    is_identifier: bool = False
+# Dataset schemas
+class ClauseBase(BaseModel):
+    clause_id: str
+    clause_text: str
+    clause_type: str
 
-class DatasetStats(BaseModel):
-    row_count: int
-    column_count: int
-    modality: str
-    task_type: str
-    columns: List[ColumnMeta]
-    missing_total: int
-    duplicate_rows: int
-    class_imbalance_ratio: Optional[float] = None
-    target_distribution: Optional[Dict[str, int]] = None
-
-class DatasetResponse(BaseModel):
-    id: int
-    name: str
-    modality: str
-    task_type: str
-    row_count: int
-    column_count: int
-    input_column: Optional[str] = None
-    target_column: Optional[str] = None
-    id_column: Optional[str] = None
-    preserved_columns: Optional[List[str]] = None
-    columns_metadata: Optional[List[Dict[str, Any]]] = None
-    created_at: Optional[datetime] = None
+class ClauseResponse(ClauseBase):
+    id: str
+    dataset_id: str
+    created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
 
-class ColumnConfigUpdate(BaseModel):
-    input_column: Optional[str] = None
-    target_column: Optional[str] = None
-    id_column: Optional[str] = None
-    preserved_columns: Optional[List[str]] = None
-    modality: Optional[str] = None
-    task_type: Optional[str] = None
+class DatasetStats(BaseModel):
+    total_clauses: int
+    num_categories: int
+    category_distribution: Dict[str, int]
+    avg_word_count: float
+    imbalance_ratio: float  # max_count / min_count
 
+class DatasetResponse(BaseModel):
+    id: str
+    name: str
+    description: Optional[str] = None
+    filename: Optional[str] = None
+    total_clauses: int
+    num_categories: int
+    created_at: datetime
+    stats: Optional[DatasetStats] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+# Preprocessing schemas
+class PreprocessingRequest(BaseModel):
+    text: str
+    remove_stopwords: bool = False
+    lemmatize: bool = False
+    preserve_legal_terms: bool = True
+
+class PreprocessingResponse(BaseModel):
+    original_text: str
+    processed_text: str
+    original_word_count: int
+    processed_word_count: int
+    token_count: int
+    tokens: List[str]
+    sentences: List[str]
+    operations_applied: List[str]
+
+# Augmentation schemas
 class AugmentationGenerateRequest(BaseModel):
-    dataset_id: int
-    algorithm: str
-    num_variations: int = 1
-    validate_augmented: bool = True
-    hyperparameters: Optional[Dict[str, Any]] = Field(default_factory=dict)
+    dataset_id: str
+    techniques: List[str] = Field(
+        default=["synonym_replacement", "random_insertion", "random_swap", "random_deletion", "sentence_restructuring"]
+    )
+    multiplier: int = Field(default=1, ge=1, le=5)  # 1x, 2x, 3x, 5x
+    selected_categories: Optional[List[str]] = None
+    random_seed: int = 42
+    similarity_threshold: float = Field(default=0.75, ge=0.5, le=1.0)
+    auto_validate: bool = True
 
-class TrainingRequest(BaseModel):
-    dataset_id: int
-    model_name: str
-    algorithm: str = "synonym_replacement"
-    test_size: float = 0.2
+class AugmentedClauseResponse(BaseModel):
+    id: str
+    dataset_id: str
+    original_clause_id: str
+    technique: str
+    original_text: str
+    augmented_text: str
+    clause_type: str
+    random_seed: Optional[int]
+    status: str
+    validation_reason: Optional[str]
+    similarity_score: float
+    created_at: datetime
 
-class ExperimentResponse(BaseModel):
-    experiment_id: Optional[int] = None
-    model_name: str
-    modality: str
-    task_type: str
-    algorithm: str
-    train_size_original: int
-    train_size_augmented: int
-    test_size: int
-    baseline_metrics: Dict[str, Any]
-    augmented_metrics: Dict[str, Any]
-    gain_summary: Dict[str, Any]
-    zero_leakage_guaranteed: bool
+    model_config = ConfigDict(from_attributes=True)
 
+class AugmentationApprovalRequest(BaseModel):
+    augmented_clause_ids: List[str]
+    action: str = Field(..., pattern="^(approve|reject)$")
+    reason: Optional[str] = None
 
+# Validation schemas
+class ValidationRunRequest(BaseModel):
+    dataset_id: str
+    similarity_threshold: float = 0.75
+    enforce_negations: bool = True
+    enforce_modal_verbs: bool = True
+    enforce_keywords: bool = True
+    enforce_numbers_dates: bool = True
+
+class ValidationItemResult(BaseModel):
+    id: str
+    augmented_clause_id: str
+    original_text: str
+    augmented_text: str
+    technique: str
+    similarity_score: float
+    legal_keywords_preserved: bool
+    negation_preserved: bool
+    modal_verbs_preserved: bool
+    numbers_dates_preserved: bool
+    status: str
+    flag_reasons: List[str]
+
+# Expansion schemas
 class DatasetExpansionSummary(BaseModel):
     original_count: int
     augmented_count: int
     accepted_count: int
     rejected_count: int
-    needs_review_count: int = 0
+    needs_review_count: int
     expansion_percentage: float
-    original_distribution: Optional[Dict[str, int]] = None
-    augmented_distribution: Optional[Dict[str, int]] = None
+    original_distribution: Dict[str, int]
+    augmented_distribution: Dict[str, int]
+
+# Training & ML schemas
+class TrainingRunRequest(BaseModel):
+    dataset_id: str
+    model_name: str = Field(default="LogisticRegression", pattern="^(LogisticRegression|MultinomialNB|LinearSVM|RandomForest)$")
+    feature_type: str = Field(default="tfidf_unigram", pattern="^(tfidf_unigram|tfidf_bigram)$")
+    train_ratio: float = Field(default=0.8, ge=0.5, le=0.9)
+    random_state: int = 42
+    use_approved_only: bool = True
+
+class MetricsDetail(BaseModel):
+    condition: str
+    accuracy: float
+    macro_precision: float
+    macro_recall: float
+    macro_f1: float
+    weighted_f1: float
+    confusion_matrix: List[List[int]]
+    labels: List[str]
+    classification_report: Dict[str, Any]
+
+class ExperimentResponse(BaseModel):
+    id: str
+    dataset_id: str
+    name: str
+    model_name: str
+    feature_type: str
+    train_ratio: float
+    random_state: int
+    original_train_size: int
+    augmented_train_size: int
+    test_size: int
+    created_at: datetime
+    metrics: Dict[str, MetricsDetail]
+    comparison: Dict[str, Any]
+
+# Robustness Testing schemas
+class RobustnessRunRequest(BaseModel):
+    experiment_id: str
+    perturbation_types: List[str] = Field(
+        default=["paraphrase_stress", "drafting_style_shift", "punctuation_spacing", "case_typo"]
+    )
+
+class RobustnessResult(BaseModel):
+    perturbation_type: str
+    original_model_accuracy: float
+    augmented_model_accuracy: float
+    original_model_f1: float
+    augmented_model_f1: float
+    accuracy_delta: float
+    f1_delta: float
+    robustness_gain: float
+    sample_perturbations: List[Dict[str, str]]

@@ -1,6 +1,6 @@
 import random
 from typing import List
-from app.algorithms.base import BaseAugmenter
+from backend.app.algorithms.base import BaseAugmenter
 
 REDUNDANT_LEGAL_CANDIDATES = {
     "hereby", "herein", "specifically", "expressly", "duly",

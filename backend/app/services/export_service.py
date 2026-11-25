@@ -15,8 +15,8 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, Tabl
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
 
-from app.core.models import Dataset, Clause, AugmentedClause, TrainingExperiment, ModelMetrics
-from app.config import EXPORTS_DIR, TRAINED_MODELS_DIR
+from backend.app.core.models import Dataset, Clause, AugmentedClause, TrainingExperiment, ModelMetrics
+from backend.app.config import EXPORTS_DIR, TRAINED_MODELS_DIR
 
 class ExportService:
     @staticmethod
