@@ -41,7 +41,7 @@ Contract clause classification models trained on limited legal datasets often fa
 ```
 ClauseAugment AI
 ├── Frontend (React 18 + Vite + Tailwind CSS + Recharts)
-│   ├── Overview Dashboard (Benchmark metrics & status)
+│   ├── Overview Dashboard (Benchmark metrics & system status)
 │   ├── Dataset Management (CSV/JSON upload & clause explorer)
 │   ├── Text Preprocessing (Interactive NLP sandbox)
 │   ├── Augmentation Studio (Multi-algorithm configuration & preview)
@@ -143,51 +143,110 @@ Open your browser and navigate to:
 
 ---
 
-## 📂 Project Structure
+## 📂 Detailed File Structure
 
 ```
-├── backend/
+clause-augment-ai/
+│
+├── backend/                                # FastAPI Python backend application
 │   ├── app/
-│   │   ├── main.py                  # FastAPI application entrypoint & lifecycle
-│   │   ├── config.py                # Configuration, keywords, paths, thresholds
-│   │   ├── api/routes/              # REST API route handlers
-│   │   │   ├── dataset.py           # Ingestion, clause retrieval, statistics
-│   │   │   ├── preprocessing.py     # NLP tokenization & stopword cleaning
-│   │   │   ├── augmentation.py      # Generation & approval workflows
-│   │   │   ├── validation.py        # Semantic cosine & integrity checks
-│   │   │   ├── training.py          # Zero-leakage experiment execution
-│   │   │   ├── evaluation.py        # Comparative metrics retrieval
-│   │   │   ├── robustness.py        # Out-of-distribution stress testing
-│   │   │   └── export.py            # CSV/JSON exports & PDF reporting
-│   │   ├── core/                    # Database connection, ORM models, schemas
-│   │   ├── services/                # Business logic & algorithm orchestration
-│   │   ├── ml/                      # Scikit-learn pipelines & experiment logic
-│   │   ├── algorithms/              # WordNet, sentence restructuring, Gemini
-│   │   └── utils/                   # File handlers, text cleaners, loggers
-│   ├── datasets/                    # Benchmark CSV datasets
-│   ├── tests/                       # Automated test suite
-│   ├── clause_augment.db            # Pre-seeded SQLite database
-│   └── requirements.txt             # Python dependencies
+│   │   ├── main.py                         # Application entry point, lifespan, CORS, route inclusion
+│   │   ├── config.py                       # Global settings, paths, thresholds, preserved legal keywords
+│   │   │
+│   │   ├── api/routes/                     # REST API endpoints
+│   │   │   ├── dataset.py                  # Dataset ingestion, clause browsing, expansion summaries
+│   │   │   ├── preprocessing.py            # Text cleaning, stopword removal, lemmatization
+│   │   │   ├── augmentation.py             # Generating variations, approvals, and rejections
+│   │   │   ├── validation.py               # Semantic validation scores, flags, and review status
+│   │   │   ├── training.py                 # ML model training launcher and experiment management
+│   │   │   ├── evaluation.py               # Model metrics, classification reports, confusion matrices
+│   │   │   ├── robustness.py               # Out-of-distribution stress testing and perturbation analysis
+│   │   │   └── export.py                   # Data export endpoints (CSV, JSON, PDF reports)
+│   │   │
+│   │   ├── core/                           # Database & validation models
+│   │   │   ├── database.py                 # SQLAlchemy engine, session maker, base declarative model
+│   │   │   ├── models.py                   # Database entities (Dataset, Clause, AugmentedClause, Experiment)
+│   │   │   └── schemas.py                  # Pydantic schemas for request/response serialization
+│   │   │
+│   │   ├── services/                       # Business logic service layer
+│   │   │   ├── dataset_service.py          # Benchmark dataset loading, stats calculation, parsing
+│   │   │   ├── preprocessing_service.py    # NLTK-based text cleaning and tokenization
+│   │   │   ├── augmentation_service.py     # Augmentation pipeline orchestration
+│   │   │   ├── validation_service.py       # Cosine similarity and legal constraint verification
+│   │   │   ├── training_service.py         # Model training execution, artifact persistence, evaluation
+│   │   │   ├── robustness_service.py       # Perturbation injection and model resilience scoring
+│   │   │   └── export_service.py           # Report formatting and export delivery
+│   │   │
+│   │   ├── ml/                             # Traditional Machine Learning core
+│   │   │   ├── feature_extraction.py       # TF-IDF unigram & bigram vectorizer pipelines
+│   │   │   ├── classifiers.py              # Model factory (RandomForest, LinearSVC, LogisticRegression, MNB)
+│   │   │   ├── metrics.py                  # Accuracy, Macro/Weighted F1, Precision, Recall, Confusion Matrix
+│   │   │   └── experiment.py               # Strict Zero-Data-Leakage train/test split experiment runner
+│   │   │
+│   │   ├── algorithms/                     # Data augmentation algorithmic transformers
+│   │   │   ├── base.py                     # Base augmenter abstract class & legal word protection rules
+│   │   │   ├── synonym_replacement.py      # WordNet-based synonym substitution
+│   │   │   ├── sentence_restructuring.py   # Syntactic clause inversion and clause transposition
+│   │   │   ├── random_insertion.py         # Contextual random synonym insertion
+│   │   │   ├── random_deletion.py          # Controlled non-critical token deletion
+│   │   │   ├── random_swap.py              # Random word order transposition
+│   │   │   ├── back_translation.py         # Paraphrase translation transformer
+│   │   │   └── gemini_augmenter.py         # Google Gemini 2.5 Flash context-aware paraphrasing
+│   │   │
+│   │   └── utils/                          # Utility helpers
+│   │       ├── text_cleaner.py             # Regex cleaning and token preservation helpers
+│   │       ├── file_handler.py             # File saving, reading, and directory helpers
+│   │       └── logger.py                   # Centralized application logging
+│   │
+│   ├── datasets/                           # Benchmark datasets storage
+│   │   └── sample_contract_clauses.csv     # 200 contract clauses across 10 legal categories
+│   ├── trained_models/                     # Serialized scikit-learn models (.joblib)
+│   ├── exports/                            # Exported CSV, JSON, and PDF evaluation reports
+│   ├── tests/                              # Automated test suite
+│   │   └── test_clause_augment.py          # Pytest integration and algorithmic test cases
+│   ├── clause_augment.db                   # SQLite database
+│   └── requirements.txt                    # Python dependencies
 │
-├── frontend/
+├── frontend/                               # React + Vite frontend application
 │   ├── src/
-│   │   ├── components/              # Header, Sidebar, StatCards
-│   │   ├── pages/                   # 11 interactive application screens
-│   │   ├── services/api.js          # Unified frontend API client
-│   │   ├── App.jsx                  # Main application router & state
-│   │   └── main.jsx                 # React root mounting
-│   ├── package.json                 # Frontend dependencies
-│   └── vite.config.js               # Vite build & proxy configuration
+│   │   ├── components/                     # Reusable UI components
+│   │   │   ├── Header.jsx                  # Top navigation bar, dataset selector, sync status
+│   │   │   ├── Sidebar.jsx                 # Collapsible navigation drawer
+│   │   │   └── StatCard.jsx                # Metrics card display component
+│   │   │
+│   │   ├── pages/                          # Application views and dashboard modules
+│   │   │   ├── Overview.jsx                # Benchmark summary, metric cards, pipeline workflow
+│   │   │   ├── DatasetManagement.jsx       # CSV/JSON file uploader, clause explorer, search/filter
+│   │   │   ├── TextPreprocessing.jsx       # Interactive NLP cleaning sandbox and token inspection
+│   │   │   ├── AugmentationStudio.jsx      # Multi-technique generation interface and live previews
+│   │   │   ├── SemanticValidation.jsx      # Cosine score inspection, flag reasons, approval actions
+│   │   │   ├── DatasetComparison.jsx       # Category distribution comparison before & after augmentation
+│   │   │   ├── ModelTraining.jsx           # Zero-leakage experiment launcher and hyperparameter selection
+│   │   │   ├── EvaluationResults.jsx       # Side-by-side metric charts, confusion matrices, F1 deltas
+│   │   │   ├── RobustnessTesting.jsx       # Stress-testing perturbations and resilience gauges
+│   │   │   ├── ExportCenter.jsx            # One-click dataset and evaluation report downloads
+│   │   │   └── ProjectDocs.jsx             # In-app architecture reference and technical guide
+│   │   │
+│   │   ├── services/
+│   │   │   └── api.js                      # Centralized API service interacting with FastAPI backend
+│   │   ├── App.jsx                         # Main layout, tab navigation, and shared application state
+│   │   ├── index.css                       # Tailwind CSS directives and custom styling
+│   │   └── main.jsx                        # React root component initialization
+│   │
+│   ├── package.json                        # Frontend packages and build scripts
+│   ├── tailwind.config.js                  # Tailwind design system configuration
+│   └── vite.config.js                      # Vite build configuration and API reverse proxy
 │
-├── .env.example                     # Environment configuration template
-└── README.md                        # Project documentation
+├── .env.example                            # Environment variables template
+├── .gitignore                              # Git exclusion rules
+└── README.md                               # Comprehensive project documentation
 ```
 
 ---
 
 ## 🧪 Testing
 
-Run the automated test suite covering unit algorithms, API routes, and zero-leakage validation:
+Execute the automated test suite covering unit algorithms, API routes, and zero-leakage validation:
 ```bash
 pytest backend/tests/test_clause_augment.py -v
 ```
