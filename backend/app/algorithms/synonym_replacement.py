@@ -70,3 +70,12 @@ class SynonymReplacementAugmenter(BaseAugmenter):
             results.append(var_text)
 
         return results
+
+    def augment(self, text: str, n_replacements: int = 1, **kwargs) -> str:
+        """Convenience method for backward compatibility."""
+        res = self.generate(text, n=1)
+        return res[0] if res else text
+
+# Backward compatibility alias
+SynonymReplacer = SynonymReplacementAugmenter
+

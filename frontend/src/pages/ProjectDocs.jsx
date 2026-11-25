@@ -39,28 +39,30 @@ export default function ProjectDocs() {
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           <div className="p-3.5 bg-slate-50 rounded-lg border border-slate-200 space-y-1">
-            <span className="font-bold text-slate-800">A. Synonym Replacement</span>
+            <span className="font-bold text-slate-800">A. Hugging Face Transformer Paraphrasing</span>
             <p className="text-slate-600">
-              Replaces contextually eligible non-critical adjectives and verbs using WordNet POS-matched synsets.
-              Strictly protects all legal keywords, defined party roles, modal verbs, and monetary/date entities.
+              Controlled sequence-to-sequence paraphrasing using Hugging Face Transformers (T5/FLAN-T5 architecture).
+              Enforces strict legal parameter controls (temperature, top-p, max/min length, repetition penalty) while
+              preserving obligations, negations, party names, and dates.
             </p>
           </div>
           <div className="p-3.5 bg-slate-50 rounded-lg border border-slate-200 space-y-1">
-            <span className="font-bold text-slate-800">B. Random Insertion</span>
+            <span className="font-bold text-slate-800">B. NLPAug Word-Level Augmentation</span>
             <p className="text-slate-600">
-              Injects contextually harmless legal modifiers (e.g. <i>duly, promptly, expressly, in writing</i>) at grammatically verified modal verb junctures.
+              Integrates NLPAug for context-preserving lexical and synonym transformations with strict legal domain stopword filters.
             </p>
           </div>
           <div className="p-3.5 bg-slate-50 rounded-lg border border-slate-200 space-y-1">
-            <span className="font-bold text-slate-800">C. Random Swap</span>
+            <span className="font-bold text-slate-800">C. spaCy Syntactic Restructuring</span>
             <p className="text-slate-600">
-              Exchanges the position of coordinate terms joined by "and" or "or" (e.g. <i>"losses and damages" &rarr; "damages and losses"</i>) while preserving sentence meaning.
+              Uses spaCy linguistic dependency parsing to safely reorder independent contractual conditions,
+              apply introductory phrase shifts (<i>"In the event that" &harr; "If"</i>), and perform active/passive conversions.
             </p>
           </div>
           <div className="p-3.5 bg-slate-50 rounded-lg border border-slate-200 space-y-1">
-            <span className="font-bold text-slate-800">D. Random Deletion</span>
+            <span className="font-bold text-slate-800">D. Synonym Replacement & Random Operators</span>
             <p className="text-slate-600">
-              Removes only demonstrably redundant legal particles (e.g. <i>hereby, specifically, actually, duly</i>) without affecting contractual conditions or exceptions.
+              WordNet-backed synonym replacement, safe modifier insertion, and coordinate term swaps with entity guardrails.
             </p>
           </div>
           <div className="p-3.5 bg-slate-50 rounded-lg border border-slate-200 space-y-1">

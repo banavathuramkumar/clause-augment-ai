@@ -88,13 +88,39 @@ The system includes a pre-seeded benchmark dataset covering **200 contract claus
 
 | Layer | Technologies |
 |---|---|
-| **Backend** | Python 3.11+, FastAPI, Pydantic, SQLAlchemy, Uvicorn |
+| **Backend** | Python 3.11+, FastAPI, Pydantic v2, SQLAlchemy, Uvicorn |
+| **Transformer Paraphrasing** | Hugging Face Transformers (T5 / FLAN-T5 Seq2Seq architecture), PyTorch |
+| **Text Augmentation** | NLPAug (`nlpaug`), NLTK (WordNet, Punkt Tokenizers, Stopwords) |
+| **Linguistic Analysis** | spaCy (`en_core_web_sm` dependency parsing & NER) |
 | **Machine Learning** | Scikit-learn (RandomForest, LinearSVC, LogisticRegression, MultinomialNB), Imbalanced-learn |
-| **NLP** | NLTK (WordNet, Punkt Tokenizers, Stopwords) |
-| **Generative AI** | Google GenAI SDK (`gemini-2.5-flash`, optional with offline fallback) |
+| **Generative AI** | Google GenAI SDK (`gemini-2.0-flash`, optional supplementary method with offline fallback) |
 | **Frontend** | React 18, Vite, Tailwind CSS, Recharts, Lucide Icons |
-| **Database** | SQLite, SQLAlchemy ORM |
-| **Testing** | Pytest, HTTPX |
+| **Database** | SQLite, SQLAlchemy ORM (`clause_augment.db`) |
+| **Testing** | Pytest, HTTPX (11 automated test suites) |
+
+---
+
+## 🔄 Automated NLP Augmentation Pipeline
+
+The system incorporates a reusable Python-based NLP pipeline (`backend.app.pipeline.clause_pipeline.ClauseAugmentationPipeline`) orchestrating:
+
+```
+Original Dataset
+      ↓
+[1. Dataset Analysis]  → Text length distributions, categories, class imbalance ratio
+      ↓
+[2. Text Preprocessing] → spaCy linguistic tokenization & legal stopword preservation
+      ↓
+[3. Clause Paraphrasing] → Hugging Face Transformers controlled sequence-to-sequence generation
+      ↓
+[4. Structural Augmentation] → spaCy dependency-guided condition reordering & active/passive shifts
+      ↓
+[5. Semantic Validation] → Cosine similarity, negation checks, entity/date guardrails, diversity metrics
+      ↓
+[6. Augmented Dataset]  → Traceable variant storage with original clause IDs and techniques
+      ↓
+[7. Model-Ready Dataset] → Deduplicated, standardized [clause_id, clause_text, clause_type, is_augmented] export
+```
 
 ---
 
@@ -113,19 +139,31 @@ cd clause-augment-ai
 
 ### 3. Backend Setup
 ```bash
-# Install Python dependencies
-pip install -r backend/requirements.txt
+# Install Python dependencies (including transformers, spacy, nlpaug, torch)
+pip install -r requirements.txt
 
-# (Optional) Set up Google Gemini API key
-# Copy .env.example to .env and add your key:
-# GEMINI_API_KEY=your_gemini_api_key_here
-# GEMINI_MODEL_NAME=gemini-2.5-flash
+# Download spaCy English language model
+python -m spacy download en_core_web_sm
 
 # Start the FastAPI backend server
 python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
 The backend API and interactive Swagger documentation will be available at:
 - **API Documentation**: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+
+### 4. Running the Test Suite
+```bash
+pytest backend/tests/test_clause_augment.py -v
+```
+All 11 unit and integration tests verify:
+- REST API health
+- Controlled transformer paraphrasing
+- NLPAug word-level augmentation
+- spaCy syntactic restructuring
+- Reusable pipeline end-to-end execution
+- Multi-tier semantic validation & guardrails
+- Zero-leakage comparative ML classification & regression experiments
+
 
 ### 4. Frontend Setup
 Open a second terminal window:

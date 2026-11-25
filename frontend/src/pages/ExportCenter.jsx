@@ -48,6 +48,22 @@ export default function ExportCenter({ dataset, selectedExperiment, experiments 
       color: 'rose'
     },
     {
+      title: 'Model-Ready Classification Dataset (CSV)',
+      desc: 'Standardized [clause_id, clause_text, clause_type, is_augmented] format ready for downstream ML training.',
+      icon: CheckCircle2,
+      url: api.getExportUrl('model_ready_csv', dataset?.id),
+      filename: `${dataset?.id}_model_ready.csv`,
+      color: 'teal'
+    },
+    {
+      title: 'Model-Ready Dataset (JSON)',
+      desc: 'Structured JSON representation of the final model-ready training set.',
+      icon: FileCode,
+      url: api.getExportUrl('model_ready_json', dataset?.id),
+      filename: `${dataset?.id}_model_ready.json`,
+      color: 'cyan'
+    },
+    {
       title: 'Unified Research Corpus (JSON)',
       desc: 'Full hierarchical JSON document containing dataset metadata, original, and augmented clauses.',
       icon: FileCode,

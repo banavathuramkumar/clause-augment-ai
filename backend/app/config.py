@@ -18,6 +18,9 @@ EXPORTS_DIR.mkdir(exist_ok=True)
 
 DATABASE_URL = f"sqlite:///{BACKEND_DIR / 'clause_augment.db'}"
 
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+GEMINI_MODEL_NAME = os.environ.get("GEMINI_MODEL_NAME", "gemini-2.0-flash")
+
 ALLOWED_CLAUSE_CATEGORIES = [
     "Confidentiality",
     "Indemnification",

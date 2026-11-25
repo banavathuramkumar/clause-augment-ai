@@ -55,13 +55,26 @@ class PreprocessingResponse(BaseModel):
 class AugmentationGenerateRequest(BaseModel):
     dataset_id: str
     techniques: List[str] = Field(
-        default=["synonym_replacement", "random_insertion", "random_swap", "random_deletion", "sentence_restructuring"]
+        default=[
+            "transformer_paraphrase",
+            "nlpaug_synonym",
+            "synonym_replacement",
+            "random_insertion",
+            "random_swap",
+            "random_deletion",
+            "sentence_restructuring"
+        ]
     )
     multiplier: int = Field(default=1, ge=1, le=5)  # 1x, 2x, 3x, 5x
     selected_categories: Optional[List[str]] = None
     random_seed: int = 42
     similarity_threshold: float = Field(default=0.75, ge=0.5, le=1.0)
     auto_validate: bool = True
+    # Transformer paraphrasing parameters
+    temperature: Optional[float] = Field(default=0.7, ge=0.1, le=1.5)
+    top_p: Optional[float] = Field(default=0.9, ge=0.1, le=1.0)
+    repetition_penalty: Optional[float] = Field(default=1.2, ge=1.0, le=2.0)
+
 
 class AugmentedClauseResponse(BaseModel):
     id: str

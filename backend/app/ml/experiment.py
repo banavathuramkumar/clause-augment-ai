@@ -114,3 +114,99 @@ def run_comparative_experiment(
             "performance_improved": f1_delta > 0
         }
     }
+
+class ZeroLeakageExperiment:
+    """
+    Harness guaranteeing zero data leakage for both classification and regression.
+    Separates test set BEFORE any data augmentation occurs.
+    """
+    def run_experiment(
+        self,
+        df,
+        modality: str = "text",
+        task_type: str = "classification",
+        model_name: str = "logistic_regression",
+        target_column: str = "category",
+        input_column: str = "text",
+        numerical_columns: list = None,
+        algorithm: str = "synonym_replacement",
+        test_size: float = 0.3,
+        random_state: int = 42
+    ):
+        from sklearn.model_selection import train_test_split
+        from sklearn.linear_model import LogisticRegression, Ridge
+        from sklearn.feature_extraction.text import TfidfVectorizer
+        from sklearn.metrics import accuracy_score, f1_score, r2_score, mean_squared_error
+        import pandas as pd
+
+        if modality == "text":
+            train_df, test_df = train_test_split(df, test_size=test_size, random_state=random_state)
+            
+            # Feature extraction strictly on train partition
+            vec = TfidfVectorizer()
+            X_train = vec.fit_transform(train_df[input_column])
+            X_test = vec.transform(test_df[input_column])
+            y_train = train_df[target_column]
+            y_test = test_df[target_column]
+
+            clf = LogisticRegression()
+            clf.fit(X_train, y_train)
+            preds_orig = clf.predict(X_test)
+            acc_orig = float(accuracy_score(y_test, preds_orig))
+
+            # Augment strictly train partition
+            from backend.app.algorithms.synonym_replacement import SynonymReplacementAugmenter
+            aug = SynonymReplacementAugmenter()
+            aug_texts = [aug.augment(t) for t in train_df[input_column]]
+            
+            combined_texts = list(train_df[input_column]) + aug_texts
+            combined_y = list(y_train) + list(y_train)
+            
+            vec_aug = TfidfVectorizer()
+            X_train_aug = vec_aug.fit_transform(combined_texts)
+            X_test_aug = vec_aug.transform(test_df[input_column])
+
+            clf_aug = LogisticRegression()
+            clf_aug.fit(X_train_aug, combined_y)
+            preds_aug = clf_aug.predict(X_test_aug)
+            acc_aug = float(accuracy_score(y_test, preds_aug))
+
+            return {
+                "zero_leakage_guaranteed": True,
+                "baseline_metrics": {"accuracy": acc_orig},
+                "augmented_metrics": {"accuracy": acc_aug},
+                "gain_summary": {"accuracy_delta": acc_aug - acc_orig}
+            }
+        else:
+            # Tabular
+            num_cols = numerical_columns or [c for c in df.columns if c != target_column]
+            train_df, test_df = train_test_split(df, test_size=test_size, random_state=random_state)
+            
+            X_train = train_df[num_cols]
+            y_train = train_df[target_column]
+            X_test = test_df[num_cols]
+            y_test = test_df[target_column]
+
+            reg = Ridge()
+            reg.fit(X_train, y_train)
+            preds_orig = reg.predict(X_test)
+            r2_orig = float(r2_score(y_test, preds_orig))
+
+            # Augment train
+            from backend.app.algorithms.tabular_augmenter import TabularAugmenter
+            tab_aug = TabularAugmenter()
+            aug_train_df = tab_aug.inject_gaussian_noise(train_df, numerical_cols=num_cols, std_dev=0.05)
+            combined_train = pd.concat([train_df, aug_train_df], ignore_index=True)
+
+            reg_aug = Ridge()
+            reg_aug.fit(combined_train[num_cols], combined_train[target_column])
+            preds_aug = reg_aug.predict(X_test)
+            r2_aug = float(r2_score(y_test, preds_aug))
+
+            return {
+                "zero_leakage_guaranteed": True,
+                "baseline_metrics": {"r2": r2_orig},
+                "augmented_metrics": {"r2": r2_aug},
+                "gain_summary": {"r2_delta": r2_aug - r2_orig}
+            }
+

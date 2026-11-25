@@ -9,12 +9,16 @@ from backend.app.algorithms.random_swap import RandomSwapAugmenter
 from backend.app.algorithms.random_deletion import RandomDeletionAugmenter
 from backend.app.algorithms.sentence_restructuring import SentenceRestructuringAugmenter
 from backend.app.algorithms.back_translation import BackTranslationAugmenter
+from backend.app.algorithms.transformer_paraphraser import TransformerParaphraser
+from backend.app.algorithms.nlpaug_augmenter import NLPAugAugmenter
 from backend.app.services.validation_service import validation_engine
 from backend.app.utils.logger import logger
 
 class AugmentationService:
     def __init__(self):
         self.algorithms = {
+            "transformer_paraphrase": TransformerParaphraser(),
+            "nlpaug_synonym": NLPAugAugmenter(),
             "synonym_replacement": SynonymReplacementAugmenter(),
             "random_insertion": RandomInsertionAugmenter(),
             "random_swap": RandomSwapAugmenter(),

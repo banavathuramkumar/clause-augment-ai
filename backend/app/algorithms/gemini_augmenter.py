@@ -4,8 +4,9 @@ Gracefully falls back to algorithmic paraphrase or reports unavailability if GEM
 """
 from typing import List, Optional
 import os
-from app.config import GEMINI_API_KEY, GEMINI_MODEL_NAME
-from app.algorithms.base import BaseAugmenter
+from backend.app.config import GEMINI_API_KEY, GEMINI_MODEL_NAME
+from backend.app.algorithms.base import BaseAugmenter
+from backend.app.algorithms.sentence_restructuring import SentenceRestructuringAugmenter
 
 class GeminiAugmenter(BaseAugmenter):
     def __init__(self, model_name: str = GEMINI_MODEL_NAME):
@@ -36,9 +37,7 @@ class GeminiAugmenter(BaseAugmenter):
         If unavailable, falls back to sentence restructuring / synonym variant.
         """
         if not self.is_available or not self.client:
-            # Clean fallback
-            from app.algorithms.sentence_restructuring import SentenceRestructurer
-            restructurer = SentenceRestructurer()
+            restructurer = SentenceRestructuringAugmenter()
             return restructurer.augment(text)
 
         prompt = (
@@ -56,11 +55,9 @@ class GeminiAugmenter(BaseAugmenter):
                 contents=prompt
             )
             paraphrased = response.text.strip() if response.text else text
-            # Strip outer quotes if any
             if paraphrased.startswith(('"', "'")) and paraphrased.endswith(('"', "'")):
                 paraphrased = paraphrased[1:-1].strip()
             return paraphrased if paraphrased else text
         except Exception:
-            # Fallback on any network/rate limit error
-            from app.algorithms.sentence_restructuring import SentenceRestructurer
-            return SentenceRestructurer().augment(text)
+            return SentenceRestructuringAugmenter().augment(text)
+

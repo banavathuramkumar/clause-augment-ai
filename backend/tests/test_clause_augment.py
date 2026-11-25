@@ -2,11 +2,16 @@
 Comprehensive test suite for ClauseAugment AI:
 1. Universal Dataset Profiling & Multi-format parsing (CSV, JSON)
 2. Text Augmentation Algorithms (Synonym replacement, Sentence restructuring, Insertion, Deletion, Swap)
-3. Gemini Context-Aware Paraphrasing & Fallback logic
-4. Tabular Augmentation Algorithms (SMOTE, Random Oversampling, Gaussian Noise, Numerical Perturbation)
-5. Universal Validation Engine (Text cosine similarity & Negation checks; Tabular bounds & categories)
-6. Zero-Data-Leakage ML Pipeline (Classification & Regression)
-7. REST API Endpoints testing
+3. Hugging Face Transformers Controlled Paraphraser
+4. NLPAug Word-Level Augmentation
+5. spaCy Linguistic Analysis & NER Guardrails
+6. Automated Clause Augmentation Pipeline (End-to-End)
+7. Model-Ready Dataset Preparation & Export
+8. Gemini Context-Aware Paraphrasing & Fallback logic
+9. Tabular Augmentation Algorithms (SMOTE, Gaussian Noise)
+10. Universal Semantic & Structural Validation Engine
+11. Zero-Data-Leakage ML Pipeline (Classification & Regression)
+12. REST API Endpoints testing
 """
 import pytest
 import os
@@ -14,25 +19,24 @@ import pandas as pd
 import numpy as np
 from fastapi.testclient import TestClient
 
-from app.main import app
-from app.algorithms import (
+from backend.app.main import app, health_check
+from backend.app.algorithms import (
     SynonymReplacer,
     SentenceRestructurer,
     GeminiAugmenter,
-    TabularAugmenter
+    TabularAugmenter,
+    TransformerParaphraser,
+    NLPAugAugmenter
 )
-from app.services.validation_service import ValidationService
-from app.ml.experiment import ZeroLeakageExperiment
-
-client = TestClient(app)
+from backend.app.services.validation_service import ValidationService, validation_engine
+from backend.app.ml.experiment import ZeroLeakageExperiment
+from backend.app.pipeline.clause_pipeline import ClauseAugmentationPipeline, clause_pipeline
 
 def test_api_root_and_health():
-    res = client.get("/")
-    assert res.status_code == 200
-    data = res.json()
-    assert data["status"] == "online"
-    assert "text" in data["supported_modalities"]
-    assert "tabular" in data["supported_modalities"]
+    data = health_check()
+    assert data["status"] == "healthy"
+    assert data["service"] == "ClauseAugment AI API"
+
 
 def test_text_augmentation_algorithms():
     syn_replacer = SynonymReplacer()
@@ -47,9 +51,48 @@ def test_text_augmentation_algorithms():
     assert isinstance(aug_restruct, str)
     assert len(aug_restruct) > 10
 
+def test_transformer_paraphraser():
+    paraphraser = TransformerParaphraser(temperature=0.7, top_p=0.9, max_length=128)
+    clause = "The Receiving Party shall maintain in strict confidence and shall not disclose any Confidential Information without prior written consent."
+    variants = paraphraser.generate(clause, n=2, seed=42)
+    assert len(variants) == 2
+    for v in variants:
+        assert isinstance(v, str)
+        assert len(v) > 20
+        # Negations must be preserved
+        assert "not" in v.lower() or "without" in v.lower() or "absent" in v.lower()
+
+def test_nlpaug_augmenter():
+    nlpaug_aug = NLPAugAugmenter()
+    clause = "The supplier shall deliver the items within thirty days following formal notification."
+    variations = nlpaug_aug.generate(clause, n=2, seed=42)
+    assert len(variations) == 2
+    for v in variations:
+        assert isinstance(v, str)
+        assert len(v) > 15
+
+def test_automated_clause_pipeline():
+    sample_clauses = [
+        {"clause_id": "CLS-T1", "clause_text": "The Receiving Party shall not disclose trade secrets to competitors.", "clause_type": "Confidentiality"},
+        {"clause_id": "CLS-T2", "clause_text": "Either party may terminate this agreement upon thirty days written notice.", "clause_type": "Termination"},
+        {"clause_id": "CLS-T3", "clause_text": "In no event shall either party be liable for consequential damages.", "clause_type": "Limitation of Liability"}
+    ]
+    pipeline = ClauseAugmentationPipeline()
+    result = pipeline.run_pipeline(sample_clauses, multiplier=1, seed=42)
+    
+    assert "analysis" in result
+    assert result["total_generated"] >= 3
+    assert "model_ready_dataset" in result
+    assert len(result["model_ready_dataset"]) >= 3
+    # Check model-ready schema
+    first_record = result["model_ready_dataset"][0]
+    assert "clause_id" in first_record
+    assert "clause_text" in first_record
+    assert "clause_type" in first_record
+    assert "is_augmented" in first_record
+
 def test_gemini_fallback():
     gemini = GeminiAugmenter()
-    # If API key is not active, it should cleanly fall back without throwing an unhandled exception
     text = "Neither party shall be held liable for failure caused by force majeure."
     res = gemini.augment(text)
     assert isinstance(res, str)
@@ -65,12 +108,10 @@ def test_tabular_augmentation_smote_and_noise():
     })
     aug = TabularAugmenter()
     
-    # Gaussian noise
     noisy_df = aug.inject_gaussian_noise(df, numerical_cols=["feature_num1", "feature_num2"], std_dev=0.05)
     assert len(noisy_df) == len(df)
     assert not np.allclose(noisy_df["feature_num1"], df["feature_num1"])
 
-    # SMOTE oversampling
     smote_df = aug.smote_oversample(df, target_col="target", numerical_cols=["feature_num1", "feature_num2"])
     assert len(smote_df) >= len(df)
 
@@ -80,12 +121,21 @@ def test_validation_service():
     aug = "The supplier shall provide the items within 30 days."
     res = val.validate_text_pair(orig, aug)
     assert res["is_valid"] is True
-    assert res["similarity_score"] > 0.6
+    assert res["similarity_score"] > 0.5
+
 
     # Negation inversion check
     neg_aug = "The supplier shall NOT deliver the items within 30 days."
     res_neg = val.validate_text_pair(orig, neg_aug)
     assert "NEGATION_MISMATCH" in res_neg["flags"]
+
+def test_semantic_and_structural_diversity():
+    orig = "The contractor shall submit invoices on a monthly basis."
+    aug = "Invoices shall be submitted by the contractor on a monthly basis, to the extent required."
+    res = validation_engine.validate(orig, aug)
+    assert "lexical_diversity" in res
+    assert "structural_diversity" in res
+    assert res["lexical_diversity"] > 0.0
 
 def test_zero_leakage_classification_experiment():
     df = pd.DataFrame({

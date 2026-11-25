@@ -30,15 +30,10 @@ def init_db():
 # Initialize tables and sample data upon module load
 init_db()
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    yield
-
 app = FastAPI(
     title="ClauseAugment AI – Contract Clause Text Augmenter API",
     description="Controlled legal text data augmentation and ML classification pipeline for contract clauses.",
-    version="1.0.0",
-    lifespan=lifespan
+    version="1.0.0"
 )
 
 app.add_middleware(

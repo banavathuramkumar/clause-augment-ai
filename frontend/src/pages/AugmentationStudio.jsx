@@ -3,20 +3,21 @@ import { Sparkles, Play, CheckCircle2, AlertTriangle, XCircle, Filter, RefreshCw
 import { api } from '../services/api';
 
 const TECHNIQUES = [
+  { id: 'transformer_paraphrase', name: 'Transformer Paraphrasing', desc: 'Controlled Hugging Face T5/FLAN-T5 text-to-text paraphraser with legal preservation' },
+  { id: 'nlpaug_synonym', name: 'NLPAug Word Augmentation', desc: 'Contextual synonym replacement powered by NLPAug with domain stopword guards' },
   { id: 'synonym_replacement', name: 'Synonym Replacement', desc: 'Contextual synonym replacement preserving legal terms' },
   { id: 'random_insertion', name: 'Random Insertion', desc: 'Inserts non-critical legal particles and qualifiers' },
   { id: 'random_swap', name: 'Random Swap', desc: 'Permutes coordinate adjectives or clauses' },
   { id: 'random_deletion', name: 'Random Deletion', desc: 'Safely removes non-critical redundant tokens' },
-  { id: 'sentence_restructuring', name: 'Sentence Restructuring', desc: 'Controlled grammatical, conditional, and syntax transformations' },
+  { id: 'sentence_restructuring', name: 'Sentence Restructuring', desc: 'Controlled grammatical, conditional, and syntax transformations via spaCy' },
   { id: 'back_translation', name: 'Back Translation', desc: 'Offline translation model (disabled if models absent)' },
 ];
 
 export default function AugmentationStudio({ dataset, onAugmentationsGenerated }) {
   const [selectedTechniques, setSelectedTechniques] = useState([
+    'transformer_paraphrase',
+    'nlpaug_synonym',
     'synonym_replacement',
-    'random_insertion',
-    'random_swap',
-    'random_deletion',
     'sentence_restructuring'
   ]);
   const [multiplier, setMultiplier] = useState(1);

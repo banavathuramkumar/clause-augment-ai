@@ -46,6 +46,18 @@ def export_file(
             path = export_service.export_dataset_json(db, dataset_id)
             return FileResponse(path, media_type="application/json", filename=f"{dataset_id}_full_dataset.json")
 
+        elif export_type == "model_ready_csv":
+            if not dataset_id:
+                raise HTTPException(status_code=400, detail="dataset_id is required")
+            path = export_service.export_model_ready_dataset(db, dataset_id, format_type="csv")
+            return FileResponse(path, media_type="text/csv", filename=f"{dataset_id}_model_ready.csv")
+
+        elif export_type == "model_ready_json":
+            if not dataset_id:
+                raise HTTPException(status_code=400, detail="dataset_id is required")
+            path = export_service.export_model_ready_dataset(db, dataset_id, format_type="json")
+            return FileResponse(path, media_type="application/json", filename=f"{dataset_id}_model_ready.json")
+
         elif export_type == "evaluation_pdf":
             if not experiment_id:
                 raise HTTPException(status_code=400, detail="experiment_id is required")

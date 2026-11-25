@@ -10,6 +10,45 @@ class SemanticValidationEngine:
     def __init__(self, default_threshold: float = 0.75):
         self.default_threshold = default_threshold
         self.vectorizer = TfidfVectorizer(ngram_range=(1, 2), stop_words="english")
+        self.nlp = None
+        self._init_spacy()
+
+    def _init_spacy(self):
+        try:
+            import spacy
+            try:
+                self.nlp = spacy.load("en_core_web_sm")
+            except Exception:
+                self.nlp = spacy.blank("en")
+        except Exception:
+            self.nlp = None
+
+    def extract_entities(self, text: str) -> List[str]:
+        """Extracts named entities (parties, organizations, jurisdictions, money, dates) using spaCy."""
+        if not self.nlp:
+            return []
+        try:
+            doc = self.nlp(text)
+            return [ent.text.lower() for ent in doc.ents if ent.label_ in {"ORG", "PERSON", "GPE", "DATE", "MONEY"}]
+        except Exception:
+            return []
+
+    def compute_diversity_metrics(self, orig_text: str, aug_text: str) -> Dict[str, float]:
+        """Measures lexical and structural phrasing diversity."""
+        w_orig = orig_text.split()
+        w_aug = aug_text.split()
+        len_orig = len(w_orig)
+        len_aug = len(w_aug)
+        length_ratio = round(len_aug / max(1, len_orig), 3)
+
+        set1 = set(w.lower() for w in w_orig)
+        set2 = set(w.lower() for w in w_aug)
+        jaccard_distance = round(1.0 - (len(set1 & set2) / max(1, len(set1 | set2))), 3)
+        return {
+            "length_ratio": length_ratio,
+            "lexical_diversity": jaccard_distance,
+            "structural_edit_distance": round(abs(len_orig - len_aug) / max(1, len_orig), 3)
+        }
 
     def compute_similarity(self, orig_text: str, aug_text: str) -> float:
         """Computes TF-IDF cosine similarity between original and augmented text."""
@@ -136,15 +175,40 @@ class SemanticValidationEngine:
 
         reason_str = "; ".join(flag_reasons) if flag_reasons else "All legal constraints and semantic thresholds met."
 
+        # Compute diversity
+        div = self.compute_diversity_metrics(orig_text, aug_text)
+
         return {
             "similarity_score": similarity,
             "legal_keywords_preserved": keywords_preserved,
             "negation_preserved": negation_preserved,
             "modal_verbs_preserved": modals_preserved,
             "numbers_dates_preserved": numbers_preserved,
+            "lexical_diversity": div["lexical_diversity"],
+            "structural_diversity": div["structural_edit_distance"],
             "status": status,
             "flag_reasons": flag_reasons,
             "reason": reason_str
         }
 
+    def validate_text_pair(self, orig_text: str, aug_text: str, threshold: float = 0.6) -> Dict[str, Any]:
+        """Convenience method for unit testing and direct pair validation."""
+        res = self.validate(orig_text, aug_text, threshold=threshold)
+        flags = []
+        if not res["negation_preserved"]:
+            flags.append("NEGATION_MISMATCH")
+        if not res["numbers_dates_preserved"]:
+            flags.append("NUMBER_MISMATCH")
+        if not res["modal_verbs_preserved"]:
+            flags.append("MODAL_MISMATCH")
+
+        return {
+            "is_valid": res["status"] in {"Accepted", "Needs Review"},
+            "similarity_score": res["similarity_score"],
+            "flags": flags,
+            "status": res["status"]
+        }
+
 validation_engine = SemanticValidationEngine()
+ValidationService = SemanticValidationEngine
+
