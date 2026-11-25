@@ -15,10 +15,7 @@ for section in doc.sections:
 # 2. Strict Black & White: RGBColor(0, 0, 0)
 BLACK = RGBColor(0, 0, 0)
 
-# Typography Specifications:
-# Headings: 14pt (bold, black)
-# Body / Paragraphs / Bullets: 12pt (regular, black)
-# Font Family: Calibri / Arial (clean standard)
+SCREENSHOT_DIR = r"c:\Users\HP\OneDrive\Desktop\Gen AI\docs\screenshots"
 
 def add_doc_title(text):
     p = doc.add_paragraph()
@@ -93,29 +90,21 @@ def add_bullet(bold_prefix, text):
     p.paragraph_format.line_spacing = 1.15
     p.paragraph_format.space_after = Pt(3)
 
-def add_code_block(code_lines):
-    for line in code_lines:
-        p = doc.add_paragraph()
-        p.alignment = WD_ALIGN_PARAGRAPH.LEFT
-        run = p.add_run(line)
-        run.font.name = 'Consolas'
-        run.font.size = Pt(10.5)
-        run.font.color.rgb = BLACK
-        p.paragraph_format.line_spacing = 1.05
-        p.paragraph_format.space_before = Pt(0)
-        p.paragraph_format.space_after = Pt(1)
-
-def add_image_section(img_path, caption_title, description_text):
-    add_subheading(caption_title)
-    if description_text:
-        add_paragraph(f"Description: {description_text}")
+def add_image_box(img_name, width=5.8):
+    img_path = os.path.join(SCREENSHOT_DIR, img_name)
     if os.path.exists(img_path):
         p_img = doc.add_paragraph()
         p_img.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        p_img.paragraph_format.space_before = Pt(8)
+        p_img.paragraph_format.space_before = Pt(6)
         p_img.paragraph_format.space_after = Pt(6)
         run_img = p_img.add_run()
-        run_img.add_picture(img_path, width=Inches(6.2))
+        run_img.add_picture(img_path, width=Inches(width))
+
+def add_image_section(img_name, caption_title, description_text):
+    add_subheading(caption_title)
+    if description_text:
+        add_paragraph(f"Description: {description_text}")
+    add_image_box(img_name, width=6.2)
     doc.add_page_break()
 
 # ----------------- PAGE 1: TITLE & PROJECT DESCRIPTION -----------------
@@ -202,7 +191,7 @@ add_subheading("Milestone 6: Conclusion")
 
 doc.add_page_break()
 
-# ----------------- PAGE 4: MILESTONE 1 IN DETAIL -----------------
+# ----------------- PAGE 4: MILESTONE 1 WITH VS CODE SCREENSHOTS -----------------
 
 add_heading("Milestone 1: Model Selection and Architecture")
 add_paragraph(
@@ -217,24 +206,17 @@ add_bullet("• Step 1 — Create a Google AI Studio Account: ", "Visit https://
 add_bullet("• Step 2 — Navigate to API Keys: ", "Click 'Get API key' from the sidebar menu to open the API key management dashboard.")
 add_bullet("• Step 3 — Create a New API Key: ", "Click 'Create API key' in a new or existing Google Cloud project.")
 add_bullet("• Step 4 — Copy API Key: ", "Copy the generated key immediately and store it in a secure location.")
-add_bullet("• Step 5 — Add the Key to Your Project: ", "Create a .env file in the root of your project directory and paste the key as shown below:")
-add_code_block([
-    "GEMINI_API_KEY=your_copied_api_key_here",
-    "GEMINI_MODEL_NAME=gemini-2.5-flash"
-])
-add_bullet("• Step 6 — Verify Key Loading: ", "The backend config.py file loads this key automatically at startup using python-dotenv:")
-add_code_block([
-    "from dotenv import load_dotenv",
-    "import os",
-    "load_dotenv()",
-    "GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '').strip()"
-])
-add_bullet("• Important — Never Commit Your API Key: ", "Add .env to your .gitignore file to prevent accidentally pushing credentials to a public repository:")
-add_code_block([".env", "backend/clause_augment.db", "__pycache__/"])
+add_bullet("• Step 5 — Add the Key to Your Project: ", "Create a .env file in the root of your project directory and paste the key as shown in the VS Code editor below:")
+
+# VS Code .env Screenshot
+add_image_box("vscode_env.png", width=5.6)
+
+add_bullet("• Step 6 — Verify Key Loading: ", "The backend config.py file loads this key automatically at startup using python-dotenv.")
+add_bullet("• Important — Never Commit Your API Key: ", "Add .env to your .gitignore file to prevent accidentally pushing credentials to a public repository.")
 
 doc.add_page_break()
 
-# ----------------- PAGE 5: MILESTONE 1 CONTINUED -----------------
+# ----------------- PAGE 5: MILESTONE 1 TERMINAL SETUP SCREENSHOT -----------------
 
 add_subheading("Activity 1.2: Research and Select the Appropriate Models")
 add_paragraph("Here are the research considerations used to select the best models for the project:")
@@ -247,23 +229,12 @@ add_subheading("Activity 1.3: Define the Architecture of the Application")
 add_bullet("• Architectural Diagram: ", "Create a decoupled representation separating React presentation, FastAPI routing, ORM database persistence, and scikit-learn training pipelines.")
 add_bullet("• Detail Frontend Functionality: ", "Outline user interactions: dataset selection, clause exploration, parameter tuning in Augmentation Studio, semantic validation review, and launching comparative training.")
 add_bullet("• Outline Backend Responsibilities: ", "Specify how FastAPI handles incoming requests, performs input validation via Pydantic, executes NLP algorithms, and enforces zero data leakage.")
-add_bullet("• Describe Zero-Leakage Protocol: ", "Split dataset into 80% train / 20% test *before* augmentation; fit TF-IDF vectorizers only on the train partition; evaluate baseline and augmented models on the identical held-out test split.")
 
 add_subheading("Activity 1.4: Set Up the Development Environment")
 add_paragraph("Follow the terminal setup instructions below:")
-add_code_block([
-    "# 1. Create and activate Python virtual environment",
-    "python -m venv venv",
-    "venv\\Scripts\\activate",
-    "",
-    "# 2. Install backend dependencies",
-    "pip install fastapi uvicorn pydantic scikit-learn nltk pandas numpy google-genai sqlalchemy httpx pytest",
-    "",
-    "# 3. Install frontend dependencies",
-    "cd frontend",
-    "npm install",
-    "cd .."
-])
+
+# Terminal Setup Screenshot
+add_image_box("terminal_setup.png", width=5.6)
 
 doc.add_page_break()
 
@@ -288,61 +259,22 @@ add_bullet("• Export Routes: ", "GET /api/export/dataset/{id}, GET /api/export
 
 doc.add_page_break()
 
-# ----------------- PAGE 7: MILESTONE 3 CODE LOGIC -----------------
+# ----------------- PAGE 7: MILESTONE 3 CODE LOGIC WITH VS CODE SCREENSHOT -----------------
 
 add_heading("Milestone 3: App.py & Services Development")
 add_paragraph(
     "Milestone 3 focuses on establishing the core service logic in backend/app/main.py and backend/app/services/. "
-    "Below is the core endpoint implementation handling dataset retrieval and zero-leakage training execution:"
+    "Below is the core endpoint implementation in VS Code handling dataset retrieval and zero-leakage training execution:"
 )
 
-add_code_block([
-    "# backend/app/main.py - Core Application Setup",
-    "from fastapi import FastAPI",
-    "from fastapi.middleware.cors import CORSMiddleware",
-    "from app.core.database import Base, engine, SessionLocal",
-    "from app.api.routes import dataset, augmentation, validation, training, evaluation, robustness, export",
-    "from app.services.dataset_service import dataset_service",
-    "",
-    "app = FastAPI(title='ClauseAugment AI', version='1.0.0')",
-    "app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_methods=['*'], allow_headers=['*'])",
-    "",
-    "app.include_router(dataset.router, prefix='/api')",
-    "app.include_router(augmentation.router, prefix='/api')",
-    "app.include_router(validation.router, prefix='/api')",
-    "app.include_router(training.router, prefix='/api')",
-    "app.include_router(evaluation.router, prefix='/api')",
-    "app.include_router(robustness.router, prefix='/api')",
-    "app.include_router(export.router, prefix='/api')",
-    "",
-    "# Zero-Data-Leakage Training Logic Sample",
-    "def run_zero_leakage_experiment(df, model_name, test_size=0.2, random_state=42):",
-    "    # 1. Pre-split raw data BEFORE any augmentation",
-    "    train_df, test_df = train_test_split(df, test_size=test_size, random_state=random_state, stratify=df['clause_type'])",
-    "",
-    "    # 2. Fit TF-IDF Vectorizer ONLY on training partition",
-    "    vectorizer = TfidfVectorizer(max_features=3000, ngram_range=(1, 2))",
-    "    X_train_orig = vectorizer.fit_transform(train_df['clause_text'])",
-    "    X_test = vectorizer.transform(test_df['clause_text'])",
-    "",
-    "    # 3. Train Baseline Classifier",
-    "    baseline_model = get_classifier(model_name, random_state)",
-    "    baseline_model.fit(X_train_orig, train_df['clause_type'])",
-    "",
-    "    # 4. Augment ONLY the training split",
-    "    aug_train_df = augment_training_partition(train_df)",
-    "    combined_train = pd.concat([train_df, aug_train_df], ignore_index=True)",
-    "    X_train_aug = vectorizer.transform(combined_train['clause_text'])",
-    "",
-    "    # 5. Train Augmented Classifier",
-    "    aug_model = get_classifier(model_name, random_state)",
-    "    aug_model.fit(X_train_aug, combined_train['clause_type'])",
-    "",
-    "    # 6. Evaluate BOTH models on the identical held-out test split",
-    "    base_metrics = compute_metrics(test_df['clause_type'], baseline_model.predict(X_test))",
-    "    aug_metrics = compute_metrics(test_df['clause_type'], aug_model.predict(X_test))",
-    "    return {'baseline': base_metrics, 'augmented': aug_metrics}"
-])
+# VS Code App.py Screenshot
+add_image_box("vscode_app_py.png", width=5.6)
+
+add_paragraph(
+    "The training service implements strict zero-data-leakage: raw datasets are pre-split into 80% train and 20% test before augmentation. "
+    "TF-IDF vectorizers fit strictly on the train partition, and augmented samples are generated only from the training set. "
+    "Both baseline and augmented classifiers are evaluated on the identical held-out test split."
+)
 
 doc.add_page_break()
 
@@ -367,7 +299,7 @@ add_bullet("• Interactive Review Queues: ", "Semantic Validation allows indivi
 
 doc.add_page_break()
 
-# ----------------- PAGE 9: MILESTONE 5 DEPLOYMENT -----------------
+# ----------------- PAGE 9: MILESTONE 5 DEPLOYMENT WITH TERMINAL SCREENSHOT -----------------
 
 add_heading("Milestone 5: Deployment")
 add_paragraph(
@@ -375,33 +307,15 @@ add_paragraph(
 )
 
 add_subheading("Activity 5.1: Local Testing & Verification")
-add_paragraph("Start both servers locally using separate terminal windows:")
-add_code_block([
-    "# Terminal 1 - Start FastAPI Backend Server",
-    "python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload",
-    "",
-    "# Terminal 2 - Start Vite React Frontend",
-    "cd frontend",
-    "npm run dev"
-])
-add_paragraph("Open http://localhost:5173 to access the local user interface and verify that all 200 benchmark clauses and training experiments load.")
+add_paragraph("Start both servers locally using separate terminal windows (FastAPI on port 8000 and Vite on port 5173).")
 
 add_subheading("Activity 5.2: Public Deployment via Ngrok")
-add_paragraph("Install and configure Ngrok to expose the frontend server over a public HTTPS tunnel:")
-add_code_block([
-    "# 1. Install Ngrok via winget",
-    "winget install --id Ngrok.Ngrok",
-    "",
-    "# 2. Connect your free Ngrok Authtoken",
-    "ngrok config add-authtoken YOUR_AUTHTOKEN_HERE",
-    "",
-    "# 3. Allow external tunnel hosts in frontend/vite.config.js",
-    "# server: { port: 5173, allowedHosts: true }",
-    "",
-    "# 4. Launch public tunnel",
-    "ngrok http 5173"
-])
-add_paragraph("Ngrok outputs a live public URL (e.g., https://moodiness-escalate-wobbling.ngrok-free.dev) accessible from any browser or device.")
+add_paragraph("Launch the Uvicorn server and establish the public Ngrok tunnel as shown in the terminal execution window below:")
+
+# Terminal Deployment Screenshot
+add_image_box("terminal_deploy.png", width=5.6)
+
+add_paragraph("Ngrok outputs a live public URL (https://moodiness-escalate-wobbling.ngrok-free.dev) accessible from any browser or device.")
 
 doc.add_page_break()
 
@@ -409,53 +323,51 @@ doc.add_page_break()
 
 add_heading("Exploring the Website's Web Pages:")
 
-SCREENSHOT_DIR = r"c:\Users\HP\OneDrive\Desktop\Gen AI\docs\screenshots"
-
 # Screen 1: Overview Dashboard
 add_image_section(
-    os.path.join(SCREENSHOT_DIR, "01_overview_dashboard.png"),
+    "01_overview_dashboard.png",
     "Overview Dashboard:",
     "The single-page overview dashboard serves as the central control panel for ClauseAugment AI. It displays active dataset indicators, total benchmark clauses (200), total generated variations (2,000), validated expansion ratio (600.5%), and the best-performing model Macro F1 (0.8459). The main section includes a class distribution bar chart across all 10 legal categories and a guided 6-phase pipeline workflow."
 )
 
 # Screen 2: Dataset Management
 add_image_section(
-    os.path.join(SCREENSHOT_DIR, "02_dataset_management.png"),
+    "02_dataset_management.png",
     "Legal Dataset Management Portal:",
     "A comprehensive data ingestion and exploration portal. Users can upload custom contract datasets in CSV or JSON format with automatic schema validation (clause_id, clause_text, clause_type). Summary cards display total clauses (200), active categories (10), average word count (19.5), and class imbalance ratio (1:1). The interactive Clause Explorer provides real-time search and category filtering with one-click CSV and JSON downloads."
 )
 
 # Screen 3: Augmentation Studio
 add_image_section(
-    os.path.join(SCREENSHOT_DIR, "03_augmentation_studio.png"),
+    "03_augmentation_studio.png",
     "Contract Clause Augmentation Studio:",
     "The core perturbation control center. Users can toggle multiple augmentation techniques (WordNet Synonym Replacement, Sentence Restructuring, Random Insertion, Random Deletion, Random Swap, Back Translation, and Google Gemini 2.5 Flash). Experimental controls allow adjusting the augmentation multiplier (1x to 5x), similarity threshold (0.75), and reproducibility seed (42). The lower catalog displays generated variations with cosine similarity percentages and review statuses."
 )
 
 # Screen 4: Semantic Validation
 add_image_section(
-    os.path.join(SCREENSHOT_DIR, "04_semantic_validation.png"),
+    "04_semantic_validation.png",
     "Semantic & Legal Guardrails Validation:",
     "Ensures generated text maintains legal equivalence and obligation fidelity. The review queue filters clauses by Needs Review, Accepted, and Rejected. Each row details the original clause vs. augmented text, semantic cosine similarity score, and automated guardrail explanations (e.g., 'Obligation modal verb dropped: Original had shall, augmented lacks them'). Researchers can approve or reject variations individually or in batches."
 )
 
 # Screen 5: Model Training
 add_image_section(
-    os.path.join(SCREENSHOT_DIR, "05_model_training.png"),
+    "05_model_training.png",
     "Machine Learning Training Engine:",
     "Launches comparative baseline vs. augmented training experiments under strict Zero-Data-Leakage guarantees. Users select from 4 classification architectures (Logistic Regression, Linear SVM, Multinomial Naive Bayes, Random Forest) and feature representations (TF-IDF Unigrams vs. Bigrams). Experimental controls allow tuning train/test split ratios (80/20) and reproducibility seeds, with a prominent leakage-free checklist confirming data isolation."
 )
 
 # Screen 6: Evaluation Results
 add_image_section(
-    os.path.join(SCREENSHOT_DIR, "06_evaluation_results.png"),
+    "06_evaluation_results.png",
     "Evaluation Results Dashboard:",
     "Displays comparative empirical performance on the held-out test split. Top stat cards highlight Test Accuracy Delta (+2.5%), Macro F1 Score Delta (+0.0406), Relative F1 Improvement (+6.79%), and Generalization Outcome ('Robust Gain'). The comparative bar chart compares Original vs. Augmented metrics across Accuracy, Macro F1, Weighted F1, Precision, and Recall. The lower section provides an interactive multi-class confusion matrix and exportable reports."
 )
 
 # Screen 7: Robustness Testing
 add_image_section(
-    os.path.join(SCREENSHOT_DIR, "07_robustness_testing.png"),
+    "07_robustness_testing.png",
     "Out-of-Distribution Robustness Stress Testing:",
     "Examines model resilience against real-world drafting variance and document noise across 4 targeted stress perturbations: Drafting Style Shift, Paraphrase Stress Test, Scanned/OCR Spacing Noise, and Transcription/Casing Permutations. Each test card displays Augmented F1 vs. Original Baseline F1 and the net positive Resilience Shift, proving that data augmentation enhances classifier robustness."
 )
@@ -470,6 +382,6 @@ add_paragraph(
     "Looking ahead, ClauseAugment AI offers significant opportunities for expansion, such as integrating local Sentence-BERT transformer embeddings for offline semantic scoring, adding conditional generative adversarial networks (CTGAN) for multi-modal tabular datasets, and implementing active learning human-in-the-loop review interfaces. By continuously refining algorithmic guardrails and enhancing frontend accessibility, the platform is well-positioned to evolve from an academic benchmark into an enterprise-ready legal NLP assistant."
 )
 
-output_path = r"c:\Users\HP\OneDrive\Desktop\Gen AI\ClauseAugment_AI_Project_Documentation.docx"
+output_path = r"c:\Users\HP\OneDrive\Desktop\Gen AI\ClauseAugment_AI_Complete_Documentation.docx"
 doc.save(output_path)
-print(f"Successfully generated 100% sample-aligned DOCX at: {output_path}")
+print(f"Successfully generated DOCX with code screenshots at: {output_path}")
