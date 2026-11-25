@@ -1,9 +1,9 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from backend.app.core.database import get_db
-from backend.app.core.schemas import RobustnessRunRequest, RobustnessResult
-from backend.app.services.robustness_service import robustness_service
+from app.core.database import get_db
+from app.core.schemas import RobustnessRunRequest, RobustnessResult
+from app.services.robustness_service import robustness_service
 
 router = APIRouter(prefix="/robustness", tags=["Robustness"])
 

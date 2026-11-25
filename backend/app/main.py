@@ -1,43 +1,34 @@
-from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.app.core.database import Base, engine, SessionLocal
-from backend.app.api.routes import (
+from contextlib import asynccontextmanager
+
+from app.config import PROJECT_NAME, API_V1_STR
+from app.core.database import init_db, SessionLocal
+from app.services.dataset_service import DatasetService
+from app.api.routes import (
     dataset,
-    preprocessing,
     augmentation,
     validation,
     training,
-    evaluation,
-    robustness,
     export
 )
-from backend.app.services.dataset_service import dataset_service
-from backend.app.utils.logger import logger
-
-def init_db():
-    logger.info("Initializing SQLite database tables...")
-    Base.metadata.create_all(bind=engine)
-    db = SessionLocal()
-    try:
-        sample = dataset_service.load_built_in_sample(db)
-        logger.info(f"Loaded benchmark dataset '{sample.name}' (ID: {sample.id}).")
-    except Exception as e:
-        logger.error(f"Error seeding benchmark dataset: {e}")
-    finally:
-        db.close()
-
-# Initialize tables and sample data upon module load
-init_db()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # Initialize DB tables and load pre-seeded benchmarks synchronously
+    init_db()
+    try:
+        db = SessionLocal()
+        DatasetService().seed_default_benchmarks(db)
+        db.close()
+    except Exception as e:
+        print(f"Benchmark seeding status: {e}")
     yield
 
 app = FastAPI(
-    title="ClauseAugment AI – Contract Clause Text Augmenter API",
-    description="Controlled legal text data augmentation and ML classification pipeline for contract clauses.",
-    version="1.0.0",
+    title=PROJECT_NAME,
+    description="Universal Data Augmentation & ML Robustness Platform for Text and Tabular Data",
+    version="2.0.0",
     lifespan=lifespan
 )
 
@@ -49,24 +40,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Register API routes
-app.include_router(dataset.router, prefix="/api")
-app.include_router(preprocessing.router, prefix="/api")
-app.include_router(augmentation.router, prefix="/api")
-app.include_router(validation.router, prefix="/api")
-app.include_router(training.router, prefix="/api")
-app.include_router(evaluation.router, prefix="/api")
-app.include_router(robustness.router, prefix="/api")
-app.include_router(export.router, prefix="/api")
+app.include_router(dataset.router, prefix=API_V1_STR)
+app.include_router(augmentation.router, prefix=API_V1_STR)
+app.include_router(validation.router, prefix=API_V1_STR)
+app.include_router(training.router, prefix=API_V1_STR)
+app.include_router(export.router, prefix=API_V1_STR)
 
-@app.get("/api/health")
-def health_check():
+@app.get("/")
+def root():
     return {
-        "status": "healthy",
-        "service": "ClauseAugment AI API",
-        "version": "1.0.0"
+        "status": "online",
+        "app": PROJECT_NAME,
+        "version": "2.0.0",
+        "supported_modalities": ["text", "tabular"],
+        "supported_tasks": ["classification", "regression", "unlabeled"]
     }
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("backend.app.main:app", host="0.0.0.0", port=8000, reload=True)
+@app.get("/health")
+def health():
+    return {"status": "healthy"}

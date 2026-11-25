@@ -1,0 +1,91 @@
+review_id,review_text,sentiment,rating,product_category
+REV-0001,The quality of this product exceeded all my expectations! Fast delivery and great build.,Positive,5,Electronics
+REV-0002,Absolutely fantastic customer service. They resolved my return request within two hours.,Positive,5,Support
+REV-0003,"Best purchase I have made this year. Intuitive design, sleek finish, and durable materials.",Positive,5,Electronics
+REV-0004,Works seamlessly right out of the box. Highly recommended for everyday professional use.,Positive,5,Office
+REV-0005,Incredible value for money. The battery life lasts twice as long as advertised.,Positive,5,Hardware
+REV-0006,Super happy with the order! Shipped securely and arrived two days ahead of schedule.,Positive,4,Logistics
+REV-0007,Very comfortable and ergonomic. My back pain has significantly reduced since using this chair.,Positive,5,Furniture
+REV-0008,Clear and detailed user manual. Set up took less than ten minutes with zero hassle.,Positive,4,Home
+REV-0009,Outstanding sound quality and deep bass. Cancels out ambient noise perfectly on flights.,Positive,5,Audio
+REV-0010,"Five stars! Durable zipper, waterproof fabric, and fits my 15-inch laptop securely.",Positive,5,Apparel
+REV-0011,"The item arrived as described. Standard packaging, average build quality for the price.",Neutral,3,General
+REV-0012,Decent functionality but the companion mobile application requires frequent reconnecting.,Neutral,3,Software
+REV-0013,"Acceptable performance overall, though the color appears slightly darker than shown online.",Neutral,3,Apparel
+REV-0014,"Fair value. Does what it says, but do not expect luxury materials or premium finishes.",Neutral,3,Home
+REV-0015,Delivery took five days which is standard. Product works fine without any major issues.,Neutral,3,Logistics
+REV-0016,"Average sound profile. Good for podcasts and meetings, but lacks bass for music.",Neutral,3,Audio
+REV-0017,"Setup was okay. A few confusing diagrams in the instructions, but figured it out eventually.",Neutral,3,Office
+REV-0018,Product functions as expected. Neither exceptionally great nor particularly bad.,Neutral,3,General
+REV-0019,"The fit is okay, slightly tight around the shoulders but wearable.",Neutral,3,Apparel
+REV-0020,Adequate battery life. Lasts around six hours before needing a recharge.,Neutral,3,Hardware
+REV-0021,Extremely disappointed. The device stopped charging completely after only three days of use.,Negative,1,Hardware
+REV-0022,Terrible customer support. Sent three emails over two weeks without any response whatsoever.,Negative,1,Support
+REV-0023,Poor build quality. The plastic bracket snapped during initial installation.,Negative,1,Home
+REV-0024,"Does not match the product photos. Cheap fabric, loose stitching, and wrong color delivered.",Negative,1,Apparel
+REV-0025,Package arrived damaged with the internal seal broken. Item was missing the charging cable.,Negative,1,Logistics
+REV-0026,Severe latency and frequent Bluetooth disconnections. Virtually unusable for video calls.,Negative,1,Audio
+REV-0027,Overpriced for the flimsy materials used. Feels like it will break within a month.,Negative,2,Office
+REV-0028,The software constantly crashes upon launch. Requested an immediate full refund.,Negative,1,Software
+REV-0029,Battery drains in less than one hour on standby mode. Completely unacceptable performance.,Negative,1,Hardware
+REV-0030,Misleading specifications. Stated as waterproof but suffered water damage from light rain.,Negative,1,Electronics
+REV-0031,Order #31: The quality of this product exceeded all my expectations! Fast delivery and great build.,Positive,5,Electronics
+REV-0032,Order #32: Absolutely fantastic customer service. They resolved my return request within two hours.,Positive,5,Support
+REV-0033,"Order #33: Best purchase I have made this year. Intuitive design, sleek finish, and durable materials.",Positive,5,Electronics
+REV-0034,Order #34: Works seamlessly right out of the box. Highly recommended for everyday professional use.,Positive,5,Office
+REV-0035,Order #35: Incredible value for money. The battery life lasts twice as long as advertised.,Positive,5,Hardware
+REV-0036,Order #36: Super happy with the order! Shipped securely and arrived two days ahead of schedule.,Positive,4,Logistics
+REV-0037,Order #37: Very comfortable and ergonomic. My back pain has significantly reduced since using this chair.,Positive,5,Furniture
+REV-0038,Order #38: Clear and detailed user manual. Set up took less than ten minutes with zero hassle.,Positive,4,Home
+REV-0039,Order #39: Outstanding sound quality and deep bass. Cancels out ambient noise perfectly on flights.,Positive,5,Audio
+REV-0040,"Order #40: Five stars! Durable zipper, waterproof fabric, and fits my 15-inch laptop securely.",Positive,5,Apparel
+REV-0041,"Order #41: The item arrived as described. Standard packaging, average build quality for the price.",Neutral,3,General
+REV-0042,Order #42: Decent functionality but the companion mobile application requires frequent reconnecting.,Neutral,3,Software
+REV-0043,"Order #43: Acceptable performance overall, though the color appears slightly darker than shown online.",Neutral,3,Apparel
+REV-0044,"Order #44: Fair value. Does what it says, but do not expect luxury materials or premium finishes.",Neutral,3,Home
+REV-0045,Order #45: Delivery took five days which is standard. Product works fine without any major issues.,Neutral,3,Logistics
+REV-0046,"Order #46: Average sound profile. Good for podcasts and meetings, but lacks bass for music.",Neutral,3,Audio
+REV-0047,"Order #47: Setup was okay. A few confusing diagrams in the instructions, but figured it out eventually.",Neutral,3,Office
+REV-0048,Order #48: Product functions as expected. Neither exceptionally great nor particularly bad.,Neutral,3,General
+REV-0049,"Order #49: The fit is okay, slightly tight around the shoulders but wearable.",Neutral,3,Apparel
+REV-0050,Order #50: Adequate battery life. Lasts around six hours before needing a recharge.,Neutral,3,Hardware
+REV-0051,Order #51: Extremely disappointed. The device stopped charging completely after only three days of use.,Negative,1,Hardware
+REV-0052,Order #52: Terrible customer support. Sent three emails over two weeks without any response whatsoever.,Negative,1,Support
+REV-0053,Order #53: Poor build quality. The plastic bracket snapped during initial installation.,Negative,1,Home
+REV-0054,"Order #54: Does not match the product photos. Cheap fabric, loose stitching, and wrong color delivered.",Negative,1,Apparel
+REV-0055,Order #55: Package arrived damaged with the internal seal broken. Item was missing the charging cable.,Negative,1,Logistics
+REV-0056,Order #56: Severe latency and frequent Bluetooth disconnections. Virtually unusable for video calls.,Negative,1,Audio
+REV-0057,Order #57: Overpriced for the flimsy materials used. Feels like it will break within a month.,Negative,2,Office
+REV-0058,Order #58: The software constantly crashes upon launch. Requested an immediate full refund.,Negative,1,Software
+REV-0059,Order #59: Battery drains in less than one hour on standby mode. Completely unacceptable performance.,Negative,1,Hardware
+REV-0060,Order #60: Misleading specifications. Stated as waterproof but suffered water damage from light rain.,Negative,1,Electronics
+REV-0061,Order #61: The quality of this product exceeded all my expectations! Fast delivery and great build.,Positive,5,Electronics
+REV-0062,Order #62: Absolutely fantastic customer service. They resolved my return request within two hours.,Positive,5,Support
+REV-0063,"Order #63: Best purchase I have made this year. Intuitive design, sleek finish, and durable materials.",Positive,5,Electronics
+REV-0064,Order #64: Works seamlessly right out of the box. Highly recommended for everyday professional use.,Positive,5,Office
+REV-0065,Order #65: Incredible value for money. The battery life lasts twice as long as advertised.,Positive,5,Hardware
+REV-0066,Order #66: Super happy with the order! Shipped securely and arrived two days ahead of schedule.,Positive,4,Logistics
+REV-0067,Order #67: Very comfortable and ergonomic. My back pain has significantly reduced since using this chair.,Positive,5,Furniture
+REV-0068,Order #68: Clear and detailed user manual. Set up took less than ten minutes with zero hassle.,Positive,4,Home
+REV-0069,Order #69: Outstanding sound quality and deep bass. Cancels out ambient noise perfectly on flights.,Positive,5,Audio
+REV-0070,"Order #70: Five stars! Durable zipper, waterproof fabric, and fits my 15-inch laptop securely.",Positive,5,Apparel
+REV-0071,"Order #71: The item arrived as described. Standard packaging, average build quality for the price.",Neutral,3,General
+REV-0072,Order #72: Decent functionality but the companion mobile application requires frequent reconnecting.,Neutral,3,Software
+REV-0073,"Order #73: Acceptable performance overall, though the color appears slightly darker than shown online.",Neutral,3,Apparel
+REV-0074,"Order #74: Fair value. Does what it says, but do not expect luxury materials or premium finishes.",Neutral,3,Home
+REV-0075,Order #75: Delivery took five days which is standard. Product works fine without any major issues.,Neutral,3,Logistics
+REV-0076,"Order #76: Average sound profile. Good for podcasts and meetings, but lacks bass for music.",Neutral,3,Audio
+REV-0077,"Order #77: Setup was okay. A few confusing diagrams in the instructions, but figured it out eventually.",Neutral,3,Office
+REV-0078,Order #78: Product functions as expected. Neither exceptionally great nor particularly bad.,Neutral,3,General
+REV-0079,"Order #79: The fit is okay, slightly tight around the shoulders but wearable.",Neutral,3,Apparel
+REV-0080,Order #80: Adequate battery life. Lasts around six hours before needing a recharge.,Neutral,3,Hardware
+REV-0081,Order #81: Extremely disappointed. The device stopped charging completely after only three days of use.,Negative,1,Hardware
+REV-0082,Order #82: Terrible customer support. Sent three emails over two weeks without any response whatsoever.,Negative,1,Support
+REV-0083,Order #83: Poor build quality. The plastic bracket snapped during initial installation.,Negative,1,Home
+REV-0084,"Order #84: Does not match the product photos. Cheap fabric, loose stitching, and wrong color delivered.",Negative,1,Apparel
+REV-0085,Order #85: Package arrived damaged with the internal seal broken. Item was missing the charging cable.,Negative,1,Logistics
+REV-0086,Order #86: Severe latency and frequent Bluetooth disconnections. Virtually unusable for video calls.,Negative,1,Audio
+REV-0087,Order #87: Overpriced for the flimsy materials used. Feels like it will break within a month.,Negative,2,Office
+REV-0088,Order #88: The software constantly crashes upon launch. Requested an immediate full refund.,Negative,1,Software
+REV-0089,Order #89: Battery drains in less than one hour on standby mode. Completely unacceptable performance.,Negative,1,Hardware
+REV-0090,Order #90: Misleading specifications. Stated as waterproof but suffered water damage from light rain.,Negative,1,Electronics

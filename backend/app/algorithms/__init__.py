@@ -1,0 +1,15 @@
+from app.algorithms.base import BaseAugmenter
+from app.algorithms.synonym_replacement import SynonymReplacementAugmenter
+from app.algorithms.random_insertion import RandomInsertionAugmenter
+from app.algorithms.random_deletion import RandomDeletionAugmenter
+from app.algorithms.random_swap import RandomSwapAugmenter
+from app.algorithms.sentence_restructuring import SentenceRestructuringAugmenter
+from app.algorithms.gemini_augmenter import GeminiAugmenter
+from app.algorithms.tabular_augmenter import TabularAugmenter
+
+# Aliases for convenience
+SynonymReplacer = SynonymReplacementAugmenter
+RandomInserter = RandomInsertionAugmenter
+RandomDeleter = RandomDeletionAugmenter
+RandomSwapper = RandomSwapAugmenter
+SentenceRestructurer = SentenceRestructuringAugmenter

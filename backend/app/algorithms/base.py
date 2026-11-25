@@ -2,7 +2,7 @@ import abc
 import re
 from typing import List, Set
 from nltk.corpus import wordnet
-from backend.app.config import LEGAL_KEYWORDS, LEGAL_MODAL_VERBS, LEGAL_NEGATIONS
+from app.config import LEGAL_KEYWORDS, LEGAL_MODAL_VERBS, LEGAL_NEGATIONS
 
 class BaseAugmenter(abc.ABC):
     def __init__(self, name: str):
@@ -45,3 +45,8 @@ class BaseAugmenter(abc.ABC):
     def generate(self, text: str, n: int = 1, seed: int = 42) -> List[str]:
         """Generate n variations of the input clause text."""
         pass
+
+    def augment(self, text: str, **kwargs) -> str:
+        """Convenience method returning a single augmented variation."""
+        res = self.generate(text, n=1, seed=kwargs.get("seed", 42))
+        return res[0] if res else text

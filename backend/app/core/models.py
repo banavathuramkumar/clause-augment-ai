@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime, timezone
 from sqlalchemy import Column, String, Integer, Float, Text, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
-from backend.app.core.database import Base
+from app.core.database import Base
 
 def generate_uuid():
     return str(uuid.uuid4())
@@ -14,62 +14,63 @@ class Dataset(Base):
     name = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
     filename = Column(String(255), nullable=True)
-    total_clauses = Column(Integer, default=0)
-    num_categories = Column(Integer, default=0)
+    file_type = Column(String(32), default="csv")
+    modality = Column(String(32), default="text")          # 'text', 'tabular', 'mixed'
+    task_type = Column(String(32), default="classification") # 'classification', 'regression', 'unlabeled'
+    total_rows = Column(Integer, default=0)
+    total_columns = Column(Integer, default=0)
+    input_column = Column(String(255), nullable=True)      # Primary text col or input feature summary
+    target_column = Column(String(255), nullable=True)     # Target/label col (None if unlabeled)
+    id_column = Column(String(255), nullable=True)         # Identifier column to preserve untouched
+    columns_meta_json = Column(Text, default="[]")         # JSON list of columns metadata
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
-    clauses = relationship("Clause", back_populates="dataset", cascade="all, delete-orphan")
-    augmented_clauses = relationship("AugmentedClause", back_populates="dataset", cascade="all, delete-orphan")
+    records = relationship("DatasetRecord", back_populates="dataset", cascade="all, delete-orphan")
+    augmented_records = relationship("AugmentedRecord", back_populates="dataset", cascade="all, delete-orphan")
     experiments = relationship("TrainingExperiment", back_populates="dataset", cascade="all, delete-orphan")
 
-class Clause(Base):
-    __tablename__ = "clauses"
+class DatasetRecord(Base):
+    __tablename__ = "dataset_records"
 
     id = Column(String(36), primary_key=True, default=generate_uuid)
     dataset_id = Column(String(36), ForeignKey("datasets.id"), nullable=False)
-    clause_id = Column(String(64), nullable=False)
-    clause_text = Column(Text, nullable=False)
-    clause_type = Column(String(128), nullable=False)
+    row_index = Column(Integer, nullable=False)
+    data_json = Column(Text, nullable=False)  # JSON representation of the complete row
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
-    dataset = relationship("Dataset", back_populates="clauses")
-    augmented_clauses = relationship("AugmentedClause", back_populates="original_clause", cascade="all, delete-orphan")
+    dataset = relationship("Dataset", back_populates="records")
+    augmented_records = relationship("AugmentedRecord", back_populates="original_record", cascade="all, delete-orphan")
 
-class AugmentedClause(Base):
-    __tablename__ = "augmented_clauses"
+class AugmentedRecord(Base):
+    __tablename__ = "augmented_records"
 
     id = Column(String(36), primary_key=True, default=generate_uuid)
     dataset_id = Column(String(36), ForeignKey("datasets.id"), nullable=False)
-    original_clause_id = Column(String(36), ForeignKey("clauses.id"), nullable=False)
+    original_record_id = Column(String(36), ForeignKey("dataset_records.id"), nullable=True)
     technique = Column(String(64), nullable=False)
-    original_text = Column(Text, nullable=False)
-    augmented_text = Column(Text, nullable=False)
-    clause_type = Column(String(128), nullable=False)
-    random_seed = Column(Integer, nullable=True)
-    status = Column(String(32), default="Pending")  # Pending, Accepted, Needs Review, Rejected
+    original_data_json = Column(Text, nullable=False)
+    augmented_data_json = Column(Text, nullable=False)
+    status = Column(String(32), default="Pending")  # 'Pending', 'Accepted', 'Needs Review', 'Rejected'
     validation_reason = Column(Text, nullable=True)
-    similarity_score = Column(Float, default=0.0)
+    similarity_score = Column(Float, default=1.0)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
-    dataset = relationship("Dataset", back_populates="augmented_clauses")
-    original_clause = relationship("Clause", back_populates="augmented_clauses")
-    validation_result = relationship("ValidationResult", uselist=False, back_populates="augmented_clause", cascade="all, delete-orphan")
+    dataset = relationship("Dataset", back_populates="augmented_records")
+    original_record = relationship("DatasetRecord", back_populates="augmented_records")
+    validation_result = relationship("ValidationResult", uselist=False, back_populates="augmented_record", cascade="all, delete-orphan")
 
 class ValidationResult(Base):
     __tablename__ = "validation_results"
 
     id = Column(String(36), primary_key=True, default=generate_uuid)
-    augmented_clause_id = Column(String(36), ForeignKey("augmented_clauses.id"), nullable=False)
+    augmented_record_id = Column(String(36), ForeignKey("augmented_records.id"), nullable=False)
     similarity_score = Column(Float, nullable=False)
-    legal_keywords_preserved = Column(Boolean, default=True)
-    negation_preserved = Column(Boolean, default=True)
-    modal_verbs_preserved = Column(Boolean, default=True)
-    numbers_dates_preserved = Column(Boolean, default=True)
+    constraints_preserved = Column(Boolean, default=True)
     status = Column(String(32), nullable=False)
-    flag_reasons = Column(Text, default="[]")  # JSON encoded list
+    flag_reasons = Column(Text, default="[]")  # JSON encoded list of strings
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
-    augmented_clause = relationship("AugmentedClause", back_populates="validation_result")
+    augmented_record = relationship("AugmentedRecord", back_populates="validation_result")
 
 class TrainingExperiment(Base):
     __tablename__ = "training_experiments"
@@ -77,6 +78,7 @@ class TrainingExperiment(Base):
     id = Column(String(36), primary_key=True, default=generate_uuid)
     dataset_id = Column(String(36), ForeignKey("datasets.id"), nullable=False)
     name = Column(String(255), nullable=False)
+    task_type = Column(String(32), default="classification") # 'classification' or 'regression'
     model_name = Column(String(64), nullable=False)
     feature_type = Column(String(64), nullable=False)
     train_ratio = Column(Float, default=0.8)
@@ -96,13 +98,7 @@ class ModelMetrics(Base):
     id = Column(String(36), primary_key=True, default=generate_uuid)
     experiment_id = Column(String(36), ForeignKey("training_experiments.id"), nullable=False)
     condition = Column(String(64), nullable=False)  # 'Original' or 'Augmented'
-    accuracy = Column(Float, nullable=False)
-    macro_precision = Column(Float, nullable=False)
-    macro_recall = Column(Float, nullable=False)
-    macro_f1 = Column(Float, nullable=False)
-    weighted_f1 = Column(Float, nullable=False)
-    confusion_matrix_json = Column(Text, nullable=False)
-    classification_report_json = Column(Text, nullable=False)
+    metrics_json = Column(Text, nullable=False)     # Complete metrics dictionary serialized as JSON
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     experiment = relationship("TrainingExperiment", back_populates="metrics")

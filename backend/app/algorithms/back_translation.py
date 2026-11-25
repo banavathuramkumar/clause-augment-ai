@@ -1,6 +1,6 @@
 from typing import List
-from backend.app.algorithms.base import BaseAugmenter
-from backend.app.utils.logger import logger
+from app.algorithms.base import BaseAugmenter
+from app.utils.logger import logger
 
 class BackTranslationAugmenter(BaseAugmenter):
     def __init__(self):
