@@ -42,6 +42,9 @@ frontend/dist/
 # Environment
 .env
 
-# MS Office Temp Files
+# MS Office & Documentation Files (keep local only)
 ~$*
+*.docx
+docs/
+
 
