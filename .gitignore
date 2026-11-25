@@ -41,3 +41,7 @@ frontend/dist/
 
 # Environment
 .env
+
+# MS Office Temp Files
+~$*
+
