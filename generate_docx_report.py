@@ -2,9 +2,6 @@ import os
 import docx
 from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.enum.table import WD_TABLE_ALIGNMENT
-from docx.oxml import OxmlElement
-from docx.oxml.ns import qn
 
 doc = docx.Document()
 
@@ -91,7 +88,7 @@ def add_screenshot(img_path, caption_text):
         p_img.paragraph_format.space_before = Pt(8)
         p_img.paragraph_format.space_after = Pt(3)
         run_img = p_img.add_run()
-        run_img.add_picture(img_path, width=Inches(6.2))
+        run_img.add_picture(img_path, width=Inches(6.3))
 
         p_cap = doc.add_paragraph()
         p_cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -209,60 +206,68 @@ add_body(
     "Activity 5.2: Public tunneling support using Ngrok for remote demonstrations and live portfolio access."
 )
 
-# ----------------- SCREENSHOT ATTACHMENTS -----------------
+# ----------------- FRESH SCREENSHOT ATTACHMENTS -----------------
 
-add_heading_1("Exploring the Website's Web Pages & Empirical Results:")
+add_heading_1("Exploring the Website's Web Pages & Live Screenshots:")
 
 SCREENSHOT_DIR = r"c:\Users\HP\OneDrive\Desktop\Gen AI\docs\screenshots"
 
-img_eval_overview = os.path.join(SCREENSHOT_DIR, "media_1795571804726_8bc21572.png")
-img_class_breakdown = os.path.join(SCREENSHOT_DIR, "media_1795571797908_fd0f0cb1.png")
-img_robustness = os.path.join(SCREENSHOT_DIR, "media_1795571794067_7a7cc370.png")
-img_dataset_mgmt = os.path.join(SCREENSHOT_DIR, "media_1795570384970_29d0331c.png")
-img_overview = os.path.join(SCREENSHOT_DIR, "media_1795570398441_06313825.png")
+img_overview = os.path.join(SCREENSHOT_DIR, "01_overview_dashboard.png")
+img_dataset_mgmt = os.path.join(SCREENSHOT_DIR, "02_dataset_management.png")
+img_augmentation = os.path.join(SCREENSHOT_DIR, "03_augmentation_studio.png")
+img_validation = os.path.join(SCREENSHOT_DIR, "04_semantic_validation.png")
+img_training = os.path.join(SCREENSHOT_DIR, "05_model_training.png")
+img_evaluation = os.path.join(SCREENSHOT_DIR, "06_evaluation_results.png")
+img_robustness = os.path.join(SCREENSHOT_DIR, "07_robustness_testing.png")
 
-add_heading_2("1. Evaluation Results & Comparative Metric Gauges:")
+add_heading_2("1. Overview Dashboard:")
 add_body(
-    "Description: The Evaluation Results screen provides an empirical side-by-side comparison between the Baseline model "
-    "(trained strictly on original data) and the Augmented model (trained on original + validated augmented samples), "
-    "both evaluated on the exact same unseen held-out test split (40 test clauses). "
-    "As shown below, RandomForest achieved a +5.0% Test Accuracy Delta and a +0.0296 Macro F1 Gain (+4.27% relative gain), "
-    "confirming robust generalization."
+    "Description: The Overview Dashboard provides a centralized system status, active dataset indicator, "
+    "total benchmark clauses (200), total generated variations (1,000), validated expansion ratio (400%), and model performance metrics."
 )
-add_screenshot(img_eval_overview, "Evaluation Results Dashboard - Comparative Metrics on Held-Out Test Set")
+add_screenshot(img_overview, "Live Overview Dashboard with System Status and Metric Cards")
 
-add_heading_2("2. Class-Wise Precision, Recall, and F1 Breakdown:")
+add_heading_2("2. Dataset Management & Ingestion Portal:")
 add_body(
-    "Description: This granular evaluation table proves that data augmentation directly addressed minority class representation. "
-    "Indemnification F1 jumped from 0.750 to 1.000 (+0.250 gain), Governing Law improved from 0.727 to 0.889 (+0.162 gain), "
-    "and Force Majeure rose from 0.857 to 1.000 (+0.143 gain). Because real-world datasets exhibit slight trade-offs in other classes, "
-    "these authentic metrics confirm the validity of our scientific scikit-learn evaluation pipeline."
+    "Description: The Dataset Management module displays the ingested contract clauses, class distribution bar charts, "
+    "average word count metrics, and interactive clause explorer with full-text search and category filtering."
 )
-add_screenshot(img_class_breakdown, "Class-Wise Precision, Recall, and F1 Performance Breakdown Across 10 Legal Categories")
+add_screenshot(img_dataset_mgmt, "Live Dataset Management Portal with Real Data Explorer")
 
-add_heading_2("3. Out-of-Distribution Robustness Stress Testing:")
+add_heading_2("3. Augmentation Studio:")
 add_body(
-    "Description: The Robustness Testing module subjects the trained models to 4 simulated real-world noise perturbations: "
-    "Drafting Style Shift, Paraphrase Stress Test, Scanned/OCR Spacing Noise, and Transcription/Casing Permutations. "
-    "The results demonstrate positive Resilience Shifts across all perturbation types (+0.0692 on paraphrase stress, +0.0296 on casing), "
-    "demonstrating that data augmentation shields the classifier against drafting noise."
+    "Description: The Augmentation Studio allows researchers to configure data augmentation algorithms (WordNet Synonym Replacement, "
+    "Sentence Restructuring, Random Deletion, Swap, and Google Gemini 2.5 Flash), set variation counts, and review real-time transformation previews."
 )
-add_screenshot(img_robustness, "Out-of-Distribution Robustness Stress Testing Across Controlled Perturbations")
+add_screenshot(img_augmentation, "Live Augmentation Studio with Multi-Algorithm Configuration")
 
-add_heading_2("4. Dataset Management & Ingestion Portal:")
+add_heading_2("4. Semantic Validation Engine:")
 add_body(
-    "Description: The Dataset Management module allows researchers to upload custom CSV or JSON datasets with automatic schema "
-    "validation (clause_id, clause_text, clause_type). It features real-time search, category filtering, word count statistics, "
-    "and one-click CSV/JSON dataset exports."
+    "Description: The Semantic Validation module verifies generated text against cosine similarity thresholds [0.60, 0.98], "
+    "obligation modal retention, negation polarity matching, and numeric token consistency. Each sample is tagged with a validation score and review status."
 )
-add_screenshot(img_dataset_mgmt, "Legal Dataset Management Portal with Custom File Ingestion & Exploration")
+add_screenshot(img_validation, "Live Semantic Validation Screen with Detailed Integrity Flags")
 
-add_heading_2("5. Overview Dashboard & Architecture Summary:")
+add_heading_2("5. Model Training (Zero Data Leakage):")
 add_body(
-    "Description: The Overview Dashboard provides a centralized system status, active legal dataset selection, "
-    "total benchmark clause counts, generated variations count, and guided pipeline workflow navigation."
+    "Description: The Model Training interface allows users to select classifiers (RandomForest, LinearSVC, LogisticRegression, MultinomialNB), "
+    "feature extraction pipelines (TF-IDF unigram/bigram), and train/test ratios. Evaluates both baseline and augmented models under strict data isolation."
 )
-add_screenshot(img_overview, "Overview Dashboard with System Status and Metric Cards")
+add_screenshot(img_training, "Live Model Training Interface with Zero-Data-Leakage Architecture")
+
+add_heading_2("6. Evaluation Results Dashboard:")
+add_body(
+    "Description: The Evaluation Results screen shows comprehensive side-by-side performance metrics on the held-out test split, "
+    "including accuracy deltas, Macro F1 improvements (+4.27% relative gain), confusion matrices, and class-wise precision/recall tables."
+)
+add_screenshot(img_evaluation, "Live Evaluation Results Dashboard with Metric Comparisons")
+
+add_heading_2("7. Out-of-Distribution Robustness Stress Testing:")
+add_body(
+    "Description: The Robustness Testing module evaluates model resilience against 4 simulated noise perturbations "
+    "(Drafting Style Shifts, Paraphrase Stress, Scanned OCR Spacing, and Typographic Permutations), measuring the empirical resilience shift."
+)
+add_screenshot(img_robustness, "Live Robustness Stress Testing Dashboard Across Controlled Noise Perturbations")
 
 # ----------------- CONCLUSION -----------------
 
@@ -281,6 +286,6 @@ add_body(
     "• Enterprise Connectors: Adding native PostgreSQL and Snowflake database ingestion pipelines."
 )
 
-output_path = r"c:\Users\HP\OneDrive\Desktop\Gen AI\ClauseAugment_AI_Project_Report.docx"
+output_path = r"c:\Users\HP\OneDrive\Desktop\Gen AI\ClauseAugment_AI_Project_Documentation.docx"
 doc.save(output_path)
 print(f"Successfully generated DOCX report at: {output_path}")
